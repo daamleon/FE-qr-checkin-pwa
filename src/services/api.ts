@@ -1,6 +1,6 @@
 import { Participant, ApiResponse } from "../types";
 
-const API_URL = "https://be-qr-checkin-pwa-production.up.railway.app/";
+const API_URL = "https://be-qr-checkin-pwa-production.up.railway.app";
 
 export const fetchParticipantById = async (id: string) => {
   try {

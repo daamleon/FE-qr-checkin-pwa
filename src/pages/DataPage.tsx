@@ -17,7 +17,7 @@ const DataPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("http://localhost:5000/participants") // Pastikan JSON Server berjalan
+    fetch("https://be-qr-checkin-pwa-production.up.railway.app/participants") // Pastikan JSON Server berjalan
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch data");
         return res.json();

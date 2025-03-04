@@ -63,7 +63,7 @@ function App() {
         <div className="min-h-screen bg-gray-100">
           <Header />
           <NetworkStatus />
-          <main className="py-4">
+          <main>
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/about" element={<AboutPage />} />

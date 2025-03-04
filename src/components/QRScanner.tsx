@@ -50,7 +50,7 @@ const QRScanner: React.FC = () => {
         if (participant.checked_in) {
           setSuccessMessage(`${participant.name} has already checked in.`);
           setParticipantData(participant);
-          setShowScanner(false); 
+          setShowScanner(false);
           return;
         }
 
@@ -63,7 +63,7 @@ const QRScanner: React.FC = () => {
             checked_in: true,
             check_in_time: new Date().toLocaleString(),
           });
-          setShowScanner(false); 
+          setShowScanner(false);
         } else {
           setError("Failed to check-in participant.");
         }
@@ -82,14 +82,14 @@ const QRScanner: React.FC = () => {
   };
 
   const handleRescan = () => {
-    setShowScanner(true); // Tampilkan kembali scanner
-    setParticipantData(null); // Reset data peserta
-    setSuccessMessage(null); // Reset pesan sukses
-    setError(null); // Reset pesan error
+    setShowScanner(true);
+    setParticipantData(null);
+    setSuccessMessage(null);
+    setError(null);
   };
 
   return (
-    <div className="space-y-4">
+    <div>
       {error && (
         <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg flex items-center">
           <AlertCircle className="h-4 w-4 mr-2" />
@@ -149,7 +149,7 @@ const QRScanner: React.FC = () => {
             <div
               className={`relative ${
                 window.innerWidth <= 768
-                  ? "fixed inset-0 bg-black"
+                  ? "fixed inset-0 bg-black flex items-center justify-center"
                   : "overflow-hidden rounded-lg border border-gray-200 bg-white p-4"
               }`}
             >
@@ -160,7 +160,8 @@ const QRScanner: React.FC = () => {
                 constraints={{ video: { facingMode: "environment" } }}
                 style={{
                   width: "100%",
-                  height: window.innerWidth <= 768 ? "100vh" : "auto",
+                  height: window.innerWidth <= 768 ? "70vh" : "auto",
+                  maxHeight: "500px", // Batasi tinggi maksimal scanner
                 }}
               />
 

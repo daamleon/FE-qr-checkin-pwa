@@ -42,7 +42,7 @@ export default defineConfig({
               cacheName: 'api-cache',
               expiration: {
                 maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24 // 24 hours
+                maxAgeSeconds: 60 * 60 * 24 
               },
               networkTimeoutSeconds: 10
             }
@@ -54,7 +54,7 @@ export default defineConfig({
               cacheName: 'local-api-cache',
               expiration: {
                 maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24 // 24 hours
+                maxAgeSeconds: 60 * 60 * 24 
               },
               networkTimeoutSeconds: 10
             }

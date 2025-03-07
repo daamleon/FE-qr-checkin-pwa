@@ -6,7 +6,7 @@ const NetworkStatus: React.FC = () => {
   const { isOnline } = useNetwork();
 
   return (
-    <div className={`fixed top-0 right-0 m-4 p-2 rounded-full ${isOnline ? 'bg-green-100' : 'bg-red-100'}`}>
+    <div className={`fixed bottom-16 right-0 m-4 p-2 rounded-full ${isOnline ? 'bg-green-100' : 'bg-red-100'}`}>
       {isOnline ? (
         <Wifi className="h-5 w-5 text-green-600" />
       ) : (

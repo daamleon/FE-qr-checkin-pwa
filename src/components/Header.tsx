@@ -1,7 +1,8 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { QrCode, Scan, Info, Database } from "lucide-react";
+import { QrCode, Scan, User, Calendar } from "lucide-react";
 import NavMobile from "./NavMobile";
+import MobileSidebar from "../components/Sidebar";
 
 const Header: React.FC = () => {
   const location = useLocation();
@@ -17,7 +18,7 @@ const Header: React.FC = () => {
                 QR Check-in
               </h1>
             </Link>
-
+            <MobileSidebar />
             <nav className="hidden md:flex items-center">
               <Link
                 to="/scan"
@@ -42,8 +43,8 @@ const Header: React.FC = () => {
                 }`}
               >
                 <div className="flex items-center">
-                  <Database className="h-5 w-5 mr-1" />
-                  <span>Data</span>
+                  <Calendar className="h-5 w-5 mr-1" />
+                  <span>Events</span>
                 </div>
               </Link>
 
@@ -56,8 +57,8 @@ const Header: React.FC = () => {
                 }`}
               >
                 <div className="flex items-center">
-                  <Info className="h-5 w-5 mr-1" />
-                  <span>About</span>
+                  <User className="h-5 w-5 mr-1" />
+                  <span>Profile</span>
                 </div>
               </Link>
             </nav>

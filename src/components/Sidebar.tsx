@@ -24,12 +24,11 @@ const MobileSidebar = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-0 h-full w-80 bg-white shadow-lg transform transition-transform ${
+        className={`fixed left-0 top-0 h-full w-80 bg-white shadow-lg transform z-50 transition-transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="p-4 flex justify-between items-center border-b">
-         
+        <div className="p-4 flex justify-between items-center">
           <button onClick={toggleSidebar}>
             <X size={24} />
           </button>
@@ -38,63 +37,59 @@ const MobileSidebar = () => {
         {/* Avatar & Nama Organizer */}
         <div className="text-center py-4 border-b">
           <img
-            src="https://via.placeholder.com/60"
+            src="/genta.png"
             alt="Avatar"
             className="w-16 h-16 rounded-full mx-auto"
           />
-          <p className="mt-2 text-lg font-semibold">Ordinary</p>
+          <p className="mt-2 text-lg font-semibold">Agendakota</p>
         </div>
 
         {/* Informasi Event */}
-        <div className="p-4 border-b">
+        <div className="p-4">
           <p className="text-lg font-semibold">Test</p>
           <p className="text-sm text-gray-500">📍 Istituto di Moda Burgo</p>
           <p className="text-sm text-gray-500">08 Mar 2025 - 15 Mar 2025</p>
         </div>
 
         {/* List Menu Tetap */}
-        <nav className="p-4 space-y-4">
+        <nav className="p-6 space-y-4">
           <Link to="/scan" className="block text-blue-600 font-semibold">
-            Scan Ticket
-          </Link>
-          <Link
-            to="/payment"
-            className="block text-gray-700 hover:text-blue-600"
-          >
-            Scan Pembayaran
-          </Link>
-          <Link
-            to="/log-scan"
-            className="block text-gray-700 hover:text-blue-600"
-          >
-            Log Scan
+            Scan QR
           </Link>
           <Link
             to="/settings"
             className="block text-gray-700 hover:text-blue-600"
           >
-            Pengaturan
+            Events
+          </Link>
+          <Link
+            to="/settings"
+            className="block text-gray-700 hover:text-blue-600"
+          >
+            Settings
+          </Link>
+          <Link to="/about" className="block text-gray-700 hover:text-blue-600">
+            About
           </Link>
         </nav>
 
         {/* Footer - Email & Logout */}
-        <div className="p-4 mt-auto border-t bg-gray-50">
+        <div className="h-26 p-4 mt-20 b-2 bg-gray-50">
           <div className="flex items-center gap-2 p-2 rounded-lg bg-white shadow">
             <img
-              src="https://via.placeholder.com/30"
+              src="/profilpic.jpg"
               alt="User Avatar"
               className="w-8 h-8 rounded-full"
             />
-            <div className="flex flex-row gap-8">
-              <div className="">
-                <p className="text-sm text-gray-700">withdaamleon@gmail.com</p>
-                <p className="text-sm text-orange-500">Adam</p>
-              </div>
-
-              <button className="w-full flex items-center text-red-500 font-semibold text-xs">
-                <LogOut size={20} />
-              </button>
-            </div>
+              <Link className="flex flex-row w-full" to="/profile">
+                <div>
+                  <p className="text-sm text-gray-700">user@gmail.com</p>
+                  <p className="text-sm text-orange-500">Adam</p>
+                </div>
+                <button className="w-full text-red-500 font-semibold text-xs place-items-end pr-2">
+                  <LogOut size={20} />
+                </button>
+              </Link>
           </div>
         </div>
       </aside>

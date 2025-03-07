@@ -8,6 +8,7 @@ import ScanPage from "./pages/ScanPage";
 import AboutPage from "./pages/AboutPage";
 import DataPage from "./pages/DataPage";
 import NotFound from "./pages/NotFound";
+import ProfilePage from "./pages/ProfilPage";
 import { registerSW } from "virtual:pwa-register";
 
 function App() {
@@ -69,6 +70,7 @@ function App() {
               <Route path="/about" element={<AboutPage />} />
               <Route path="/scan" element={<ScanPage />} />
               <Route path="/data" element={<DataPage />} />{" "}
+              <Route path="/profile" element={<ProfilePage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

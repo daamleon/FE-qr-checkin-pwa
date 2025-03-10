@@ -15,7 +15,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 pb-12  bg-white shadow-md rounded-lg">
+    <div className="max-w-2xl mx-auto p-6 pb-12  bg-white shadow-md rounded-lg h-screen fixed w-full">
       {/* Header */}
       <div className="flex items-center gap-4">
         <User size={20} className="text-blue-500" />

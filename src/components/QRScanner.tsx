@@ -147,7 +147,6 @@ const QRScanner: React.FC = () => {
             </div>
           ) : (
             <div className="relative flex items-center justify-center w-full max-w-[600px] h-[70vh] rounded-xl border border-gray-400 overflow-hidden">
-              {/* Teks petunjuk di atas scanner */}
               <p className="absolute top-3 text-white bg-gray-700 px-3 py-1 rounded-md text-sm z-10">
                 Arahkan kamera ke kode QR
               </p>

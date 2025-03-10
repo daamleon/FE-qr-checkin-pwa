@@ -6,7 +6,7 @@ const NavMobile: React.FC = () => {
   const location = useLocation();
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg z-10">
       <div className="flex justify-around p-2">
         <Link
           to="/data"

@@ -89,7 +89,7 @@ const QRScanner: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="">
       {error && (
         <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg flex items-center">
           <AlertCircle className="h-4 w-4 mr-2" />
@@ -146,13 +146,7 @@ const QRScanner: React.FC = () => {
               <Loader className="h-8 w-8 text-blue-500 animate-spin" />
             </div>
           ) : (
-            <div
-              className={`relative ${
-                window.innerWidth <= 768
-                  ? "fixed inset-0 bg-black flex items-center justify-center"
-                  : "overflow-hidden rounded-lg border border-gray-200 bg-white p-4"
-              }`}
-            >
+            <div className="relative flex items-center justify-center w-full rounded-lg border border-gray-200 bg-white overflow-hidden">
               <QrScanner
                 delay={500}
                 onScan={handleScan}
@@ -161,10 +155,9 @@ const QRScanner: React.FC = () => {
                 style={{
                   width: "100%",
                   height: window.innerWidth <= 768 ? "70vh" : "auto",
-                  maxHeight: "500px", // Batasi tinggi maksimal scanner
+                  maxHeight: "500px",
                 }}
               />
-
               {window.innerWidth <= 768 && (
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="border-2 border-white rounded-lg w-64 h-64 animate-pulse"></div>

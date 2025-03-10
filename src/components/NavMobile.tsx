@@ -31,9 +31,9 @@ const NavMobile: React.FC = () => {
           <span className="text-xs">Scan QR</span>
         </Link>
         <Link
-          to="/about"
+          to="/profile"
           className={`flex flex-col items-center p-2 rounded-lg ${
-            location.pathname === "/about"
+            location.pathname === "/profile"
               ? "text-blue-600 bg-blue-50"
               : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
           }`}

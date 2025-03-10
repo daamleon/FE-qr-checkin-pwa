@@ -57,7 +57,8 @@ const MobileSidebar = () => {
             Scan QR
           </Link>
           <Link
-            to="/settings"
+            to="/ebent
+            "
             className="block text-gray-700 hover:text-blue-600"
           >
             Events

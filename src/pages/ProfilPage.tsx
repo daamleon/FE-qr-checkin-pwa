@@ -1,4 +1,4 @@
-import { User } from "lucide-react";
+import { User, Users } from "lucide-react";
 
 const ProfilePage = () => {
   // Contoh data akun user & daftar organizernya
@@ -49,7 +49,7 @@ const ProfilePage = () => {
                 <h4 className="text-md font-medium">{org.name}</h4>
                 <p className="text-sm text-gray-500">{org.role}</p>
               </div>
-              <User size={24} className="text-blue-500" />
+              <Users size={24} className="text-blue-500" />
             </div>
           ))}
         </div>

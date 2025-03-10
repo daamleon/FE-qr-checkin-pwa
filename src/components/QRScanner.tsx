@@ -146,7 +146,12 @@ const QRScanner: React.FC = () => {
               <Loader className="h-8 w-8 text-blue-500 animate-spin" />
             </div>
           ) : (
-            <div className="relative flex items-center justify-center w-full rounded-lg border border-gray-200 bg-white overflow-hidden">
+            <div className="relative flex items-center justify-center w-full max-w-[600px] h-[70vh] rounded-xl border border-gray-400 overflow-hidden">
+              {/* Teks petunjuk di atas scanner */}
+              <p className="absolute top-3 text-white bg-gray-700 px-3 py-1 rounded-md text-sm z-10">
+                Arahkan kamera ke kode QR
+              </p>
+
               <QrScanner
                 delay={500}
                 onScan={handleScan}
@@ -154,10 +159,11 @@ const QRScanner: React.FC = () => {
                 constraints={{ video: { facingMode: "environment" } }}
                 style={{
                   width: "100%",
-                  height: window.innerWidth <= 768 ? "70vh" : "auto",
-                  maxHeight: "500px",
+                  height: "100%",
+                  objectFit: "cover",
                 }}
               />
+
               {window.innerWidth <= 768 && (
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="border-2 border-white rounded-lg w-64 h-64 animate-pulse"></div>

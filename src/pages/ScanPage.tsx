@@ -6,12 +6,12 @@ const ScanPage: React.FC = () => {
   const { isOnline } = useNetwork();
 
   return (
-    <div className="flex items-center justify-center">
+  
       <div
         id="scan"
-        className="w-screen max-w-md bg-white px-6 items-center shadow-sm h-screen"
+        className="w-full h-screen max-w-md bg-white px-4 pb-6 shadow-md rounded-lg fixed"
       >
-        <h1 className="text-2xl font-semibold text-center text-gray-800 mb-4 mt-4">
+        <h1 className="text-2xl font-semibold text-center text-gray-800 m-2">
           QR Code Check-in
         </h1>
 
@@ -22,7 +22,7 @@ const ScanPage: React.FC = () => {
         )}
         <QRScanner />
       </div>
-    </div>
+    
   );
 };
 

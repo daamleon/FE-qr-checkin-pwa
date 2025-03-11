@@ -1,28 +1,32 @@
+import { useNavigate } from "react-router-dom";
 import { User, Users } from "lucide-react";
 
 const ProfilePage = () => {
-  // Contoh data akun user & daftar organizernya
+  const navigate = useNavigate();
+
   const user = {
     name: "Adam Yanuar Zulmi",
-    email: "withdaamleon@gmail.com",
+    email: "adam@example.com",
     avatar: "/profilpic.jpg",
     status: "Aktif",
     joined: "12 Januari 2024",
     organizers: [
       { id: 1, name: "Agentakota", role: "Owner" },
-      { id: 2, name: "Eventnesia", role: "Admin" },
+      { id: 2, name: "DailyHotels", role: "Admin" },
     ],
   };
 
+  const handleOrganizerClick = (organizerId: number) => {
+    navigate(`/organizer/${organizerId}/events`);
+  };
+
   return (
-    <div className="max-w-2xl mx-auto p-6 pb-12  bg-white shadow-md rounded-lg h-screen fixed w-full">
-      {/* Header */}
+    <div className="max-w-2xl mx-auto p-6 pb-12 bg-white shadow-md h-screen fixed w-full">
       <div className="flex items-center gap-4">
         <User size={20} className="text-blue-500" />
         <h2 className="text-2xl font-semibold">Profil</h2>
       </div>
 
-      {/* Avatar & Informasi User */}
       <div className="flex flex-col items-center mt-6">
         <img
           src={user.avatar}
@@ -36,14 +40,14 @@ const ProfilePage = () => {
         </span>
       </div>
 
-      {/* Daftar Organizer */}
       <div className="mt-6">
         <h3 className="text-lg font-semibold mb-2">Organizer Anda</h3>
         <div className="space-y-3">
           {user.organizers.map((org) => (
             <div
               key={org.id}
-              className="flex justify-between items-center p-3 bg-gray-100 rounded-lg shadow-sm"
+              className="flex justify-between items-center p-3 bg-gray-100 rounded-lg shadow-sm cursor-pointer hover:bg-gray-200 transition"
+              onClick={() => handleOrganizerClick(org.id)}
             >
               <div>
                 <h4 className="text-md font-medium">{org.name}</h4>
@@ -54,8 +58,6 @@ const ProfilePage = () => {
           ))}
         </div>
       </div>
-
-     
     </div>
   );
 };

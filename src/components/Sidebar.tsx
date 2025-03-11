@@ -17,7 +17,7 @@ const MobileSidebar = () => {
 
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-30 transition-opacity"
+          className="fixed inset-0 bg-black bg-opacity-30 transition-opacity z-50"
           onClick={toggleSidebar}
         ></div>
       )}

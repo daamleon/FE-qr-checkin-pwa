@@ -6,9 +6,10 @@ import NetworkStatus from "./components/NetworkStatus";
 import HomePage from "./pages/HomePage";
 import ScanPage from "./pages/ScanPage";
 import AboutPage from "./pages/AboutPage";
-import DataPage from "./pages/DataPage";
+import DetailEventPage from "./pages/DetailEventPage";
 import NotFound from "./pages/NotFound";
 import ProfilePage from "./pages/ProfilPage";
+import EventPage from "./pages/EventPage";
 import { registerSW } from "virtual:pwa-register";
 
 function App() {
@@ -62,15 +63,19 @@ function App() {
     <NetworkProvider>
       <Router>
         <div className="min-h-screen bg-gray-100">
-          <Header />
+          <header className="sticky top-0 left-0 w-full bg-white z-50">
+            <Header />
+          </header>
           <NetworkStatus />
-          <main>
+          <main className="w-screen">
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/scan" element={<ScanPage />} />
-              <Route path="/data" element={<DataPage />} />{" "}
+              <Route path="/detail" element={<DetailEventPage />} />{" "}
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/organizer/:id/events" element={<EventPage />} />
+              <Route path="/detail/:id/" element={<DetailEventPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

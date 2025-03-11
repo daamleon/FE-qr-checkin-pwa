@@ -8,7 +8,7 @@ const ScanPage: React.FC = () => {
   return (
     <div
       id="scan"
-      className="w-full h-screen max-w-md bg-white px-4 pb-6 shadow-md rounded-lg fixed items center"
+      className="h-screen w-screen bg-white px-4 pb-6 shadow-md rounded-lg fixed items center"
     >
       <div>
         <h1 className="text-2xl font-semibold text-center text-gray-800 m-2">

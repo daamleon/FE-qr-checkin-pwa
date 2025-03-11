@@ -6,12 +6,12 @@ const NavMobile: React.FC = () => {
   const location = useLocation();
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg z-10">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg z-10 border-t">
       <div className="flex justify-around p-2">
         <Link
-          to="/data"
+          to="/organizer/1/events"
           className={`flex flex-col items-center p-2 rounded-lg ${
-            location.pathname === "/data"
+            location.pathname === "/organizer/1/events"
               ? "text-blue-600 bg-blue-50"
               : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
           }`}

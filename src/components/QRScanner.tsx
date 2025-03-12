@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import QrScanner from "react-qr-scanner";
 import { AlertCircle, CheckCircle, Loader, User, RotateCw } from "lucide-react";
 import { fetchParticipantById, checkInParticipant } from "../services/api";
+import API_BASE_URL from "../services/api";
 
 const QRScanner: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
@@ -47,10 +48,17 @@ const QRScanner: React.FC = () => {
           return;
         }
 
-        console.log(`Processing check-in for ${participant.id}`);
-        if (participant.checked_in) {
-          setSuccessMessage(`${participant.name} has already checked in.`);
-          setParticipantData(participant);
+        console.log(`Fetching latest participant data for ${participant.id}`);
+        const latestParticipantResponse = await fetch(
+          `${API_BASE_URL}/participants/${participant.id}`
+        );
+        const latestParticipant = await latestParticipantResponse.json();
+
+        if (latestParticipant.checked_in) {
+          setSuccessMessage(
+            `${latestParticipant.name} has already checked in.`
+          );
+          setParticipantData(latestParticipant);
           setShowScanner(false);
           return;
         }

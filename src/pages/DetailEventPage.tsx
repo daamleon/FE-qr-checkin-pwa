@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ParticipantRow from "../components/ParticipantRow";
+import API_BASE_URL from "../services/api";
 
 interface Participant {
   id: string;
@@ -21,8 +22,14 @@ interface EventDetail {
   check_ins: number;
 }
 
+interface Organizer {
+  id: number;
+  name: string;
+  events: EventDetail[];
+}
+
 const DetailEventPage = () => {
-  const { organizersId, eventId } = useParams();
+  const { organizerId, eventId } = useParams();
   const [event, setEvent] = useState<EventDetail | null>(null);
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,23 +37,32 @@ const DetailEventPage = () => {
   useEffect(() => {
     const fetchEventDetail = async () => {
       try {
-        console.log(`Fetching event: ${organizersId}`);
-        const eventResponse = await fetch(
-          `http://localhost:5000/organizers?eventsId=${eventId}`
-        );
-        if (!eventResponse.ok) throw new Error("Failed to fetch event");
+        console.log("Fetching organizer data:", organizerId);
 
-        const eventData = await eventResponse.json();
+        const organizerResponse = await fetch(
+          `${API_BASE_URL}/organizers/${organizerId}`
+        );
+        if (!organizerResponse.ok) throw new Error("Organizer not found");
+
+        const organizerData: Organizer = await organizerResponse.json();
+
+        const eventData = organizerData.events.find(
+          (e: EventDetail) => e.id === Number(eventId)
+        );
+
+        if (!eventData) throw new Error("Event not found");
+
         setEvent(eventData);
 
-        console.log(`Fetching participants for event: ${eventId}`);
+        console.log("Fetching participants for event:", eventId);
         const participantsResponse = await fetch(
-          `http://localhost:5000/participants?eventId=${eventId}`
+          `${API_BASE_URL}/participants?eventId=${eventId}`
         );
         if (!participantsResponse.ok)
           throw new Error("Failed to fetch participants");
 
-        const participantsData = await participantsResponse.json();
+        const participantsData: Participant[] =
+          await participantsResponse.json();
         console.log("Participants Data:", participantsData);
 
         setParticipants(participantsData);
@@ -57,10 +73,10 @@ const DetailEventPage = () => {
       }
     };
 
-    if (eventId) {
+    if (organizerId && eventId) {
       fetchEventDetail();
     }
-  }, [organizersId, eventId]);
+  }, [organizerId, eventId]);
 
   if (loading) return <p>Loading...</p>;
   if (!event) return <p>Event tidak ditemukan.</p>;
@@ -90,7 +106,7 @@ const DetailEventPage = () => {
               participants.map((participant) => (
                 <ParticipantRow
                   key={participant.id}
-                  organizerId={organizersId!}
+                  organizerId={organizerId!}
                   eventId={eventId!}
                   {...participant}
                 />

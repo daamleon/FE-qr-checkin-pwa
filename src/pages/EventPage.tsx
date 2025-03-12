@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import EventCard from "../components/EventCard";
 import { ChevronDown } from "lucide-react";
+import API_BASE_URL from "../services/api";
 
 interface Event {
   id: number;
@@ -28,7 +29,7 @@ const EventPage = () => {
     const fetchEvents = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/organizers/${organizerKey}`
+          `${API_BASE_URL}/organizers/${organizerKey}`
         );
         const data = await response.json();
 

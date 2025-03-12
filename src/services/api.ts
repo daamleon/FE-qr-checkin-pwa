@@ -1,6 +1,8 @@
 import { Participant, ApiResponse } from "../types";
 
-const API_URL = "http://localhost:5000";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+export default API_BASE_URL;
 
 /**
  * Fetch participant data by event ID and participant ID.
@@ -11,10 +13,10 @@ export const fetchParticipantById = async (
 ): Promise<Participant | null> => {
   try {
     console.log(
-      `Fetching participant from: ${API_URL}/participants?eventId=${eventId}`
+      `Fetching participant from: ${API_BASE_URL}/participants?eventId=${eventId}`
     );
 
-    const response = await fetch(`${API_URL}/participants?eventId=${eventId}`);
+    const response = await fetch(`${API_BASE_URL}/participants?eventId=${eventId}`);
 
     if (!response.ok) {
       throw new Error(`Error fetching participants: ${response.statusText}`);
@@ -45,7 +47,7 @@ export const checkInParticipant = async (
 
     // PATCH langsung ke /participants/{id}
     const updateResponse = await fetch(
-      `${API_URL}/participants/${participantId}`,
+      `${API_BASE_URL}/participants/${participantId}`,
       {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },

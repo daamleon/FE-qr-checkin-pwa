@@ -3,22 +3,11 @@ import QrScanner from "react-qr-scanner";
 import { AlertCircle, CheckCircle, Loader, User, RotateCw } from "lucide-react";
 import { fetchParticipantById, checkInParticipant } from "../services/api";
 
-interface Participant {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  checked_in: boolean;
-  check_in_time?: string;
-}
-
 const QRScanner: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [participantData, setParticipantData] = useState<Participant | null>(
-    null
-  );
+  const [participantData, setParticipantData] = useState<any>(null);
   const [showScanner, setShowScanner] = useState<boolean>(true);
 
   const handleScan = async (result: any) => {
@@ -31,22 +20,34 @@ const QRScanner: React.FC = () => {
         return;
       }
 
+      // Pecah QR Code menjadi organizerId, eventId, participantId
+      const [organizerId, eventId, participantId] = scannedData
+        .trim()
+        .split("-");
+      if (!organizerId || !eventId || !participantId) {
+        setError("QR Code format invalid.");
+        return;
+      }
+
       setIsLoading(true);
       setError(null);
       setSuccessMessage(null);
       setParticipantData(null);
 
       try {
-        console.log(`Fetching participant with ID: ${scannedData.trim()}`);
-        const participant = await fetchParticipantById(scannedData.trim());
+        console.log(
+          `Fetching participant with ID: ${participantId} in Event: ${eventId} under Organizer: ${organizerId}`
+        );
+        const participant = await fetchParticipantById(eventId, participantId);
 
         if (!participant) {
-          setError("Participant not found.");
+          setError(
+            `Participant ${participantId} not found in event ${eventId}`
+          );
           return;
         }
 
         console.log(`Processing check-in for ${participant.id}`);
-
         if (participant.checked_in) {
           setSuccessMessage(`${participant.name} has already checked in.`);
           setParticipantData(participant);
@@ -54,7 +55,7 @@ const QRScanner: React.FC = () => {
           return;
         }
 
-        const checkInResponse = await checkInParticipant(participant.id);
+        const checkInResponse = await checkInParticipant(participantId);
 
         if (checkInResponse.success) {
           setSuccessMessage(`Checked in ${participant.name} successfully!`);
@@ -119,16 +120,6 @@ const QRScanner: React.FC = () => {
               </p>
             </div>
           </div>
-          <div className="space-y-2">
-            <div>
-              <p className="text-sm text-gray-600">Email:</p>
-              <p className="text-gray-800">{participantData.email}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Phone:</p>
-              <p className="text-gray-800">{participantData.phone}</p>
-            </div>
-          </div>
           <button
             onClick={handleRescan}
             className="mt-6 w-full flex items-center justify-center px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
@@ -161,7 +152,7 @@ const QRScanner: React.FC = () => {
                   height: "100%",
                   objectFit: "cover",
                   border: "1px solid gray",
-                  borderRadius: "2%"
+                  borderRadius: "2%",
                 }}
               />
 

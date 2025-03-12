@@ -35,12 +35,12 @@ function App() {
 
           const { checkInParticipant } = await import("./services/api");
 
-          for (const id of pendingCheckIns) {
+          for (const { participantId } of pendingCheckIns) {
             try {
-              await checkInParticipant(id);
+              await checkInParticipant(participantId);
             } catch (err) {
               console.error(
-                `Failed to process offline check-in for ID: ${id}`,
+                `Failed to process offline check-in for ID: ${participantId}`,
                 err
               );
             }
@@ -72,10 +72,12 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/scan" element={<ScanPage />} />
-              <Route path="/detail" element={<DetailEventPage />} />{" "}
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/organizer/:id/events" element={<EventPage />} />
-              <Route path="/detail/:id/" element={<DetailEventPage />} />
+              <Route
+                path="/detail/:organizerId/:eventId"
+                element={<DetailEventPage />}
+              />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

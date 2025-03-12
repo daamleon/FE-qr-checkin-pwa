@@ -1,11 +1,15 @@
-import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import ParticipantRow from "../components/ParticipantRow";
 
 interface Participant {
-  id: number;
-  ticketType: string;
-  buyer: string;
-  status: string;
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  ticket_type: string;
+  checked_in: boolean;
+  check_in_time: string | null;
 }
 
 interface EventDetail {
@@ -13,14 +17,52 @@ interface EventDetail {
   title: string;
   date: string;
   time: string;
-  ticketsSold: number;
-  checkIns: number;
-  participants: Participant[];
+  tickets_sold: number;
+  check_ins: number;
 }
 
 const DetailEventPage = () => {
-  const location = useLocation();
-  const event = location.state as EventDetail | null; 
+  const { organizersId, eventId } = useParams();
+  const [event, setEvent] = useState<EventDetail | null>(null);
+  const [participants, setParticipants] = useState<Participant[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchEventDetail = async () => {
+      try {
+        console.log(`Fetching event: ${organizersId}`);
+        const eventResponse = await fetch(
+          `http://localhost:5000/organizers?eventsId=${eventId}`
+        );
+        if (!eventResponse.ok) throw new Error("Failed to fetch event");
+
+        const eventData = await eventResponse.json();
+        setEvent(eventData);
+
+        console.log(`Fetching participants for event: ${eventId}`);
+        const participantsResponse = await fetch(
+          `http://localhost:5000/participants?eventId=${eventId}`
+        );
+        if (!participantsResponse.ok)
+          throw new Error("Failed to fetch participants");
+
+        const participantsData = await participantsResponse.json();
+        console.log("Participants Data:", participantsData);
+
+        setParticipants(participantsData);
+      } catch (error) {
+        console.error("Error fetching event or participants:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (eventId) {
+      fetchEventDetail();
+    }
+  }, [organizersId, eventId]);
+
+  if (loading) return <p>Loading...</p>;
   if (!event) return <p>Event tidak ditemukan.</p>;
 
   return (
@@ -30,16 +72,8 @@ const DetailEventPage = () => {
         {event.date} | {event.time}
       </p>
       <p className="text-sm text-gray-500">
-        {event.ticketsSold} Tiket Terjual • {event.checkIns} Check-Ins
+        {event.tickets_sold} Tiket Terjual • {event.check_ins} Check-Ins
       </p>
-
-      <div className="mt-4">
-        <input
-          type="text"
-          placeholder="Cari Transaksi"
-          className="w-full px-3 py-2 border rounded-lg"
-        />
-      </div>
 
       <div className="mt-4 bg-white shadow-md rounded-lg overflow-hidden">
         <table className="w-full border-collapse">
@@ -52,12 +86,19 @@ const DetailEventPage = () => {
             </tr>
           </thead>
           <tbody>
-            {event.participants?.map((participant) => (
-              <ParticipantRow key={participant.id} {...participant} />
-            )) || (
+            {participants.length > 0 ? (
+              participants.map((participant) => (
+                <ParticipantRow
+                  key={participant.id}
+                  organizerId={organizersId!}
+                  eventId={eventId!}
+                  {...participant}
+                />
+              ))
+            ) : (
               <tr>
-                <td colSpan={4} className="p-3 text-center">
-                  Tidak ada peserta.
+                <td colSpan={4} className="p-3 text-center text-gray-500">
+                  Tidak ada peserta yang terdaftar.
                 </td>
               </tr>
             )}

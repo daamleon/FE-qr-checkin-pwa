@@ -1,54 +1,51 @@
 import { Participant, ApiResponse } from "../types";
 
-const API_URL = "https://be-qr-checkin-pwa-production.up.railway.app";
+const API_URL = "http://localhost:5000";
 
-export const fetchParticipantById = async (id: string) => {
+/**
+ * Fetch participant data by event ID and participant ID.
+ */
+export const fetchParticipantById = async (
+  eventId: string,
+  participantId: string
+): Promise<Participant | null> => {
   try {
-    console.log(`Fetching participant from: ${API_URL}/participants?id=${id}`);
+    console.log(
+      `Fetching participant from: ${API_URL}/participants?eventId=${eventId}`
+    );
 
-    const response = await fetch(`${API_URL}/participants?id=${id}`);
+    const response = await fetch(`${API_URL}/participants?eventId=${eventId}`);
 
     if (!response.ok) {
-      throw new Error(`Error fetching participant: ${response.statusText}`);
+      throw new Error(`Error fetching participants: ${response.statusText}`);
     }
 
-    const data = await response.json();
+    const participants = await response.json();
 
-    return data.length ? data[0] : null;
+    // Cari participant berdasarkan ID
+    const participant = participants.find(
+      (p: Participant) => p.id === participantId
+    );
+
+    return participant || null;
   } catch (error) {
     console.error("Error fetching participant:", error);
-    throw error;
+    return null;
   }
 };
 
-export const checkInParticipant = async (id: string): Promise<ApiResponse> => {
+/**
+ * Check-in participant
+ */
+export const checkInParticipant = async (
+  participantId: string
+): Promise<ApiResponse> => {
   try {
-    console.log(`Checking in participant: ${id}`);
+    console.log(`Checking in participant: ${participantId}`);
 
-    const getResponse = await fetch(`${API_URL}/participants?id=${id}`);
-
-    if (!getResponse.ok) {
-      throw new Error("Failed to fetch participant");
-    }
-
-    const data = await getResponse.json();
-
-    if (!data.length) {
-      return { success: false, message: "Participant not found" };
-    }
-
-    const participant: Participant = data[0];
-
-    if (participant.checked_in) {
-      return {
-        success: false,
-        message: "Participant already checked in",
-        data: participant,
-      };
-    }
-
+    // PATCH langsung ke /participants/{id}
     const updateResponse = await fetch(
-      `${API_URL}/participants/${participant.id}`,
+      `${API_URL}/participants/${participantId}`,
       {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -60,7 +57,7 @@ export const checkInParticipant = async (id: string): Promise<ApiResponse> => {
     );
 
     if (!updateResponse.ok) {
-      throw new Error("Failed to update participant");
+      throw new Error("Failed to update participant check-in");
     }
 
     const updatedData: Participant = await updateResponse.json();

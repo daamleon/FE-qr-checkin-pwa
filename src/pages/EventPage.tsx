@@ -1,74 +1,48 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import EventCard from "../components/EventCard";
 import { ChevronDown } from "lucide-react";
 
-const organizers: Record<number, string> = {
-  1: "Agentakota",
-  2: "DailyHotels",
-};
-
 interface Event {
-  id: string;
+  id: number;
   date: string;
   time: string;
   title: string;
   image: string;
-  ticketsSold: number;
-  checkIns: number;
+  tickets_sold: number;
+  check_ins: number;
 }
-
-const eventData: Record<number, Event[]> = {
-  1: [
-    {
-      id: "1",
-      date: "10 Mar 2025",
-      time: "13:00 - 16:00 WIB",
-      title: "Networking Day for Startups",
-      image: "/event1.jpg",
-      ticketsSold: 75,
-      checkIns: 50,
-    },
-    {
-      id:"2",
-      date: "18 Mar 2025",
-      time: "10:00 - 14:00 WIB",
-      title: "Tech Talks 2025",
-      image: "/event2.jpg",
-      ticketsSold: 90,
-      checkIns: 60,
-    },
-  ],
-  2: [
-    {
-      id:"3",
-      date: "22 Mar 2025",
-      time: "09:00 - 12:00 WIB",
-      title: "Hotel Business Conference",
-      image: "/event3.jpg",
-      ticketsSold: 120,
-      checkIns: 85,
-    },
-    {
-      id:"4",
-      date: "28 Mar 2025",
-      time: "14:00 - 18:00 WIB",
-      title: "Hospitality Management Workshop",
-      image: "/event4.jpg",
-      ticketsSold: 100,
-      checkIns: 70,
-    },
-  ],
-};
 
 const EventPage = () => {
   const { id } = useParams();
   const organizerKey = Number(id);
   const navigate = useNavigate();
 
-  console.log("Organizer ID dari URL:", id);
+  const [organizerName, setOrganizerName] = useState<string>(
+    "Organizer Tidak Diketahui"
+  );
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const organizerName = organizers[organizerKey] ?? "Organizer Tidak Diketahui";
-  const events = eventData[organizerKey] ?? [];
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/organizers/${organizerKey}`
+        );
+        const data = await response.json();
+
+        setOrganizerName(data.name);
+        setEvents(data.events || []);
+      } catch (error) {
+        console.error("Error fetching event data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, [organizerKey]);
 
   const handleOrganizerChange = (
     event: React.ChangeEvent<HTMLSelectElement>
@@ -77,8 +51,11 @@ const EventPage = () => {
     navigate(`/organizer/${selectedId}/events`);
   };
 
+  if (loading) return <p>Loading...</p>;
+
   return (
     <div className="max-w-3xl mx-auto p-6 min-h-screen overflow-auto">
+      {/* Dropdown Pilihan Organizer */}
       <div className="relative mb-6">
         <label
           htmlFor="organizer-select"
@@ -93,11 +70,8 @@ const EventPage = () => {
             value={organizerKey}
             onChange={handleOrganizerChange}
           >
-            {Object.entries(organizers).map(([key, name]) => (
-              <option key={key} value={key}>
-                {name}
-              </option>
-            ))}
+            <option value="1">Agentakota</option>
+            <option value="2">DailyHotels</option>
           </select>
           <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500" />
         </div>
@@ -119,7 +93,7 @@ const EventPage = () => {
           <div
             key={event.id}
             className="mb-4 cursor-pointer"
-            onClick={() => navigate(`/detail/${event.id}`, { state: event })}
+            onClick={() => navigate(`/detail/${organizerKey}/${event.id}`)}
           >
             <p className="text-gray-500 font-medium">{event.date}</p>
             <EventCard
@@ -127,8 +101,8 @@ const EventPage = () => {
               date={event.date}
               title={event.title}
               image={event.image}
-              ticketsSold={event.ticketsSold}
-              checkIns={event.checkIns}
+              ticketsSold={event.tickets_sold}
+              checkIns={event.check_ins}
             />
           </div>
         ))

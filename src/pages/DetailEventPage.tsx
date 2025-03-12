@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import API_BASE_URL from "../services/api";
 import EventHeader from "../components/event/EventHeader";
-import SearchBar from "../components/common/Searchbar";
+import SearchBar from "../components/common/SearchBar";
 import ParticipantTable from "../components/event/ParticipantTable";
 
 interface Participant {

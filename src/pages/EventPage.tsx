@@ -57,7 +57,7 @@ const EventPage = () => {
   return (
     <div className="mb-12 max-w-3xl mx-auto p-6 min-h-screen overflow-auto">
       {/* Dropdown Pilihan Organizer */}
-      <div className="relative mb-6">
+      <div className="relative mb-4">
         <label
           htmlFor="organizer-select"
           className="block text-lg font-semibold mb-2"
@@ -80,14 +80,11 @@ const EventPage = () => {
 
       <h2 className="text-xl font-semibold mb-4">Event oleh {organizerName}</h2>
 
-      <div className="flex gap-2 mb-4">
+      {/* <div className="flex gap-2 mb-4">
         <button className="bg-pink-600 text-white px-3 py-2 rounded-full">
          Daftar Event
         </button>
-        {/* <button className="border border-gray-300 px-3 py-2 rounded-full flex items-center gap-2">
-          📅 Tanggal
-        </button> */}
-      </div>
+      </div> */}
 
       {events.length > 0 ? (
         events.map((event) => (
@@ -96,7 +93,7 @@ const EventPage = () => {
             className="mb-4 cursor-pointer"
             onClick={() => navigate(`/detail/${organizerKey}/${event.id}`)}
           >
-            <p className="text-gray-500 font-medium">{event.date}</p>
+            {/* <p className="text-gray-500 font-medium">{event.date}</p> */}
             <EventCard
               time={event.time}
               date={event.date}

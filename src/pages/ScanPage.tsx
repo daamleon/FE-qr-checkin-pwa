@@ -11,7 +11,7 @@ const ScanPage: React.FC = () => {
       className="h-screen w-screen bg-white px-4 pb-6 shadow-md rounded-lg fixed items center"
     >
       <div>
-        <h1 className="text-2xl font-semibold text-center text-gray-800 m-2">
+        <h1 className="text-xl font-semibold text-left text-gray-800 py-4">
           Scan QR Tiket
         </h1>
 

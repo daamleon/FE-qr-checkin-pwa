@@ -27,8 +27,8 @@ const ParticipantRow: React.FC<ParticipantProps> = ({
           <span
             className={`px-2 py-1 rounded-full text-xs font-medium ${
               checked_in
-                ? "bg-green-200 text-green-800"
-                : "bg-yellow-200 text-yellow-800"
+                ? "text-green-800"
+                : "text-yellow-800"
             }`}
           >
             {checked_in ? "Check-In" : "Belum Check-In"}
@@ -46,15 +46,15 @@ const ParticipantRow: React.FC<ParticipantProps> = ({
 
       {showQR && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-            <h3 className="text-lg font-semibold mb-2">QR Code untuk {name}</h3>
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center place-items-center">
+            <h3 className="text-lg font-semibold mb-4">QR Code untuk {name}</h3>
             <QRCodeCanvas
               value={`${organizerId}-${eventId}-${id}`}
-              size={150}
+              size={180}
             />
             <button
               onClick={() => setShowQR(false)}
-              className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg"
+              className="mt-6 px-4 py-2 bg-red-500 text-white rounded-lg"
             >
               Tutup
             </button>

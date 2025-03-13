@@ -26,7 +26,7 @@ const EventHeader: React.FC<EventHeaderProps> = ({
           alt={title}
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent flex flex-col justify-end p-4">
+        <div className="absolute inset-0 bg-gradient-to-t from-pink-900 to-transparent flex flex-col justify-end p-4">
           <h2 className="text-xl font-bold text-white">{title}</h2>
           <p className="text-gray-300">
             {date} | {time}

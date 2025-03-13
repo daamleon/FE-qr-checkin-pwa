@@ -20,12 +20,12 @@ const ParticipantRow: React.FC<ParticipantProps> = ({
 
   return (
     <>
-      <tr className="border-b">
+      <tr className="border-b text-xs">
         <td className="p-3">{id}</td>
         <td className="p-3">{name}</td>
         <td className="p-3">
           <span
-            className={`px-2 py-1 rounded-full text-xs font-medium ${
+            className={`px-2 py-1 rounded-full font-medium ${
               checked_in
                 ? "text-green-800"
                 : "text-yellow-800"
@@ -37,9 +37,9 @@ const ParticipantRow: React.FC<ParticipantProps> = ({
         <td className="p-3">
           <button
             onClick={() => setShowQR(true)}
-            className="text-blue-500 hover:underline"
+            className="text-blue-500 hover:underline text-xs"
           >
-            📷 QR Code
+            QR Code
           </button>
         </td>
       </tr>

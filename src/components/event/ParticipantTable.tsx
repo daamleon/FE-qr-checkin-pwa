@@ -16,7 +16,7 @@ const ParticipantTable: React.FC<ParticipantTableProps> = ({
     <div className="bg-white shadow-md rounded-lg overflow-hidden">
       <table className="w-full border-collapse">
         <thead>
-          <tr className="bg-gray-100 text-left">
+          <tr className="bg-pink-700 text-center text-white">
             <th className="p-3">Ticket</th>
             <th className="p-3">Buyer</th>
             <th className="p-3">Status</th>

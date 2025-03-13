@@ -11,7 +11,7 @@ const MobileSidebar = () => {
 
   return (
     <>
-      <button onClick={toggleSidebar} className="p-2 lg:hidden">
+      <button onClick={toggleSidebar} className="p-2 md:hidden">
         <Menu size={24} />
       </button>
 
@@ -57,7 +57,7 @@ const MobileSidebar = () => {
             Scan QR
           </Link>
           <Link
-            to="/ebent
+            to="/organizer/1/events
             "
             className="block text-gray-700 hover:text-blue-600"
           >
@@ -82,15 +82,15 @@ const MobileSidebar = () => {
               alt="User Avatar"
               className="w-8 h-8 rounded-full"
             />
-              <Link className="flex flex-row w-full" to="/profile">
-                <div>
-                  <p className="text-sm text-gray-700">user@gmail.com</p>
-                  <p className="text-sm text-orange-500">Adam</p>
-                </div>
-                <button className="w-full text-red-500 font-semibold text-xs place-items-end pr-2">
-                  <LogOut size={20} />
-                </button>
-              </Link>
+            <Link className="flex flex-row w-full" to="/profile">
+              <div>
+                <p className="text-sm text-gray-700">user@gmail.com</p>
+                <p className="text-sm text-orange-500">Adam</p>
+              </div>
+              <button className="w-full text-red-500 font-semibold text-xs place-items-end pr-2">
+                <LogOut size={20} />
+              </button>
+            </Link>
           </div>
         </div>
       </aside>

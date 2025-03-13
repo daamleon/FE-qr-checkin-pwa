@@ -28,7 +28,7 @@ const ProfilePage = () => {
   return (
     <div className="max-w-2xl mx-auto p-6 pb-12 bg-white shadow-md h-screen fixed w-full">
       <div className="flex items-center gap-4">
-        <User size={20} className="text-pink-600" />
+        <User size={20} className="text-blue-500" />
         <h2 className="text-2xl font-semibold">Profil</h2>
       </div>
 
@@ -40,6 +40,9 @@ const ProfilePage = () => {
         />
         <h3 className="mt-3 text-xl font-semibold">{user.name}</h3>
         <p className="text-gray-500">{user.email}</p>
+        {/* <span className="mt-1 px-3 py-1 bg-green-100 text-green-600 text-sm rounded-full">
+          {user.status}
+        </span> */}
       </div>
 
       <div className="mt-6">
@@ -55,7 +58,7 @@ const ProfilePage = () => {
                 <h4 className="text-md font-medium">{org.name}</h4>
                 <p className="text-sm text-gray-500">{org.role}</p>
               </div>
-              <Users size={24} className="text-pink-600" />
+              <Users size={24} className="text-blue-500" />
             </div>
           ))}
         </div>

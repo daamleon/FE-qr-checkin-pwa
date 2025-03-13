@@ -35,9 +35,9 @@ const Header: React.FC = () => {
               </Link>
 
               <Link
-                to="/data"
+                to="/organizer/1/events"
                 className={`px-3 py-2 rounded-md text-sm font-medium ${
-                  location.pathname === "/data"
+                  location.pathname === "/organizer/1/events"
                     ? "text-blue-600 bg-blue-50"
                     : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
                 }`}
@@ -49,7 +49,7 @@ const Header: React.FC = () => {
               </Link>
 
               <Link
-                to="/about"
+                to="/profile"
                 className={`px-3 py-2 rounded-md text-sm font-medium ${
                   location.pathname === "/about"
                     ? "text-blue-600 bg-blue-50"

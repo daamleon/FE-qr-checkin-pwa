@@ -4,6 +4,7 @@ import API_BASE_URL from "../services/api";
 import EventHeader from "../components/event/EventHeader";
 import SearchBar from "../components/common/SearchBar";
 import ParticipantTable from "../components/event/ParticipantTable";
+import TicketSalesCard from "../components/event/DataCard";
 
 interface Participant {
   id: string;
@@ -19,6 +20,7 @@ interface EventDetail {
   tickets_sold: number;
   check_ins: number;
   image_url: string;
+  revenue: number; // Tambahkan data revenue
 }
 
 interface Organizer {
@@ -79,7 +81,13 @@ const DetailEventPage = () => {
   if (!event) return <p>Event tidak ditemukan.</p>;
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
+    <div className="max-w-4xl px-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
+        <TicketSalesCard
+          revenue={event.revenue}
+          tickets_sold={event.tickets_sold}
+        />
+      </div>
       <EventHeader
         title={event.title}
         date={event.date}

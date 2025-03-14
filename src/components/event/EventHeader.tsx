@@ -19,7 +19,6 @@ const EventHeader: React.FC<EventHeaderProps> = ({
 }) => {
   return (
     <div>
-        <p className="text-xl font-bold mb-4">Event Information</p>
       <div className="relative w-full h-48 rounded-lg overflow-hidden shadow-md">
         <img
           src={image || "/event.jpeg"}

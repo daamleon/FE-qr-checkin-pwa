@@ -20,7 +20,8 @@ interface EventDetail {
   tickets_sold: number;
   check_ins: number;
   image_url: string;
-  revenue: number; // Tambahkan data revenue
+  revenue: number;
+  user_regist: number;
 }
 
 interface Organizer {
@@ -77,25 +78,40 @@ const DetailEventPage = () => {
     p.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (loading) return <p>Loading...</p>;
-  if (!event) return <p>Event tidak ditemukan.</p>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center place-items-center  h-full py-[65%]">
+        <p className="text-lg font-semibold text-pink-700 animate-pulse">
+          Loading...
+        </p>
+      </div>
+    );
+  if (!event)
+  return (
+    <div className="flex justify-center items-center place-items-center h-full py-[65%]">
+      <p className="text-lg font-semibold text-pink-700">
+        Data Event Tidak Ditemukan.
+      </p>
+    </div>
+  );
 
   return (
     <div className="max-w-4xl px-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
-        <TicketSalesCard
-          revenue={event.revenue}
-          tickets_sold={event.tickets_sold}
-        />
-      </div>
+      <h1 className="font-bold text-xl py-4">Event Detail & Information</h1>
       <EventHeader
         title={event.title}
         date={event.date}
         time={event.time}
-        ticketsSold={event.tickets_sold}
-        checkIns={event.check_ins}
         image={event.image_url}
       />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
+        <TicketSalesCard
+          revenue={event.revenue}
+          tickets_sold={event.tickets_sold}
+          check_ins={event.check_ins}
+          user_regist={event.user_regist}
+        />
+      </div>
 
       <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} />
 

@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import EventCard from "../components/EventCard";
+import EventCard from "../components/event/EventCard";
 import { ChevronDown } from "lucide-react";
 import API_BASE_URL from "../services/api";
 
@@ -52,7 +52,15 @@ const EventPage = () => {
     navigate(`/organizer/${selectedId}/events`);
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center place-items-center  h-full py-[65%]">
+        <p className="text-lg font-semibold text-pink-700 animate-pulse">
+          Loading...
+        </p>
+      </div>
+    );
+
 
   return (
     <div className="mb-12 max-w-3xl mx-auto p-6 min-h-screen overflow-auto">

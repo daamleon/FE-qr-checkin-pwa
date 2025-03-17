@@ -4,8 +4,8 @@ interface EventHeaderProps {
   title: string;
   date: string;
   time: string;
-  ticketsSold: number;
-  checkIns: number;
+  // ticketsSold: number;
+  // checkIns: number;
   image: string;
 }
 
@@ -13,8 +13,8 @@ const EventHeader: React.FC<EventHeaderProps> = ({
   title,
   date,
   time,
-  ticketsSold,
-  checkIns,
+  // ticketsSold,
+  // checkIns,
   image,
 }) => {
   return (
@@ -30,9 +30,9 @@ const EventHeader: React.FC<EventHeaderProps> = ({
           <p className="text-gray-300">
             {date} | {time}
           </p>
-          <p className="text-sm text-gray-400">
+          {/* <p className="text-sm text-gray-400">
             {ticketsSold} Tiket Terjual • {checkIns} Check-Ins
-          </p>
+          </p> */}
         </div>
       </div>
     </div>

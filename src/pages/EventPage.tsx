@@ -20,9 +20,9 @@ const EventPage = () => {
   const organizerKey = Number(id);
   const navigate = useNavigate();
 
-  const [organizerName, setOrganizerName] = useState<string>(
-    "Organizer Tidak Diketahui"
-  );
+  // const [organizerName, setOrganizerName] = useState<string>(
+  //   "Organizer Tidak Diketahui"
+  // );
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -38,7 +38,7 @@ const EventPage = () => {
           `${API_BASE_URL}/organizers/${organizerKey}`
         );
         const data = await response.json();
-        setOrganizerName(data.name);
+        // setOrganizerName(data.name);
         setEvents(data.events || []);
       } catch (error) {
         console.error("Error fetching event data:", error);
@@ -68,12 +68,17 @@ const EventPage = () => {
 
   return (
     <div className="flex justify-center bg-gray-100 min-h-screen w-full">
-      <div className="relative mx-auto p-6 bg-white shadow-md w-full sm:w-96 md:max-w-xl min-h-screen">
+      <div className="relative mx-auto px-6 bg-white shadow-md w-full sm:w-96 md:max-w-xl min-h-screen">
         {/* Header dengan ikon */}
-        <div className="flex items-center gap-4 mb-4">
+        <div className="flex items-center gap-4 mb-2 mt-4">
           <Calendar size={20} className="text-pink-700" />
           <h2 className="text-2xl font-semibold">Event</h2>
         </div>
+
+        {/* Judul Event */}
+        {/* <h2 className="text-lg font-semibold mb-4">
+          Event oleh {organizerName}
+        </h2> */}
 
         {/* Dropdown Pilihan Organizer */}
         <div className="relative mb-4">
@@ -97,13 +102,8 @@ const EventPage = () => {
           </div>
         </div>
 
-        {/* Judul Event */}
-        <h2 className="text-xl font-semibold mb-4">
-          Event oleh {organizerName}
-        </h2>
-
         {/* Daftar Event */}
-        <div className="overflow-auto max-h-[52vh] pr-2">
+        <div className="overflow-auto max-h-[58vh] pr-2">
           {events.length > 0 ? (
             events.map((event) => (
               <div

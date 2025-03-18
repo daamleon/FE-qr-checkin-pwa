@@ -52,7 +52,7 @@ const ProfilePage = () => {
         </div>
 
         {/* Daftar Organizer */}
-        <div className="mt-6 flex-grow overflow-auto max-h-[32vh] pr-2">
+        <div className="mt-6 flex-grow overflow-auto max-h-[30vh] pr-2">
           <h3 className="text-lg font-semibold mb-2">Organizer Anda</h3>
           <div className="space-y-3">
             {user.organizers.map((org) => (

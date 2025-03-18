@@ -4,6 +4,7 @@ import API_BASE_URL from "../services/api";
 import Scanner from "./scanner/Scanner";
 import ParticipantInfo from "./scanner/ParticipantInfo";
 import MessageAlert from "./scanner/MessageAlert";
+import CheckInSuccess from "./scanner/CheckInSuccess";
 
 const QRScanner: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
@@ -11,6 +12,7 @@ const QRScanner: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [participantData, setParticipantData] = useState<any>(null);
   const [showScanner, setShowScanner] = useState<boolean>(true);
+  const [showSuccess, setShowSuccess] = useState<boolean>(false);
 
   const handleScan = async (result: any) => {
     if (result) {
@@ -71,6 +73,7 @@ const QRScanner: React.FC = () => {
             check_in_time: new Date().toLocaleString(),
           });
           setShowScanner(false);
+          setShowSuccess(true); // Menampilkan modal CheckInSuccess
         } else {
           setError("Failed to check-in participant.");
         }
@@ -93,6 +96,7 @@ const QRScanner: React.FC = () => {
     setParticipantData(null);
     setSuccessMessage(null);
     setError(null);
+    setShowSuccess(false);
   };
 
   return (
@@ -100,20 +104,31 @@ const QRScanner: React.FC = () => {
       <MessageAlert message={error} type="error" />
       <MessageAlert message={successMessage} type="success" />
 
-      {participantData ? (
-        <ParticipantInfo
-          participant={participantData}
-          onRescan={handleRescan}
+      {showSuccess && participantData && (
+        <CheckInSuccess
+          participantName={participantData.name}
+          ticketType={participantData.ticketType || "General Admission"}
+          eventName={participantData.event || "Event Tidak Diketahui"}
+          eventDate={participantData.check_in_time}
+          onClose={handleRescan}
         />
-      ) : (
-        showScanner && (
-          <Scanner
-            onScan={handleScan}
-            onError={handleError}
-            isLoading={isLoading}
-          />
-        )
       )}
+
+      {!showSuccess &&
+        (participantData ? (
+          <ParticipantInfo
+            participant={participantData}
+            onRescan={handleRescan}
+          />
+        ) : (
+          showScanner && (
+            <Scanner
+              onScan={handleScan}
+              onError={handleError}
+              isLoading={isLoading}
+            />
+          )
+        ))}
     </div>
   );
 };

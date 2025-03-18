@@ -52,7 +52,7 @@ const ProfilePage = () => {
         </div>
 
         {/* Daftar Organizer */}
-        <div className="mt-6 flex-grow overflow-auto max-h-[50vh] pr-2">
+        <div className="mt-6 flex-grow overflow-auto max-h-[32vh] pr-2">
           <h3 className="text-lg font-semibold mb-2">Organizer Anda</h3>
           <div className="space-y-3">
             {user.organizers.map((org) => (
@@ -72,7 +72,7 @@ const ProfilePage = () => {
         </div>
 
         {/* Tombol Logout */}
-        <div className="mt-auto pt-6 pb-4">
+        <div className="">
           <button
             onClick={handleLogout}
             className="w-full flex items-center justify-center gap-2 bg-pink-700 text-white px-4 py-2 rounded-lg shadow-md hover:bg-pink-600 transition"

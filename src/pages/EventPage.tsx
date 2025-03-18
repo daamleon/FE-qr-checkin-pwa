@@ -103,7 +103,7 @@ const EventPage = () => {
         </h2>
 
         {/* Daftar Event */}
-        <div className="overflow-auto max-h-[46vh] pr-2">
+        <div className="overflow-auto max-h-[52vh] pr-2">
           {events.length > 0 ? (
             events.map((event) => (
               <div

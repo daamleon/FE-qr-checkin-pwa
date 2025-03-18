@@ -68,7 +68,7 @@ const EventPage = () => {
 
   return (
     <div className="flex justify-center bg-gray-100 min-h-screen w-full">
-      <div className="relative mx-auto p-6 pb-24 bg-white shadow-md w-full sm:w-96 md:max-w-xl min-h-screen">
+      <div className="relative mx-auto p-6 bg-white shadow-md w-full sm:w-96 md:max-w-xl min-h-screen">
         {/* Header dengan ikon */}
         <div className="flex items-center gap-4 mb-4">
           <Calendar size={20} className="text-pink-700" />

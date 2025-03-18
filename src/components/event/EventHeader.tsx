@@ -13,13 +13,11 @@ const EventHeader: React.FC<EventHeaderProps> = ({
   title,
   date,
   time,
-  // ticketsSold,
-  // checkIns,
   image,
 }) => {
   return (
     <div>
-      <div className="relative w-full h-48 rounded-lg overflow-hidden shadow-md">
+      <div className="relative w-full h-48 md:h-full rounded-lg overflow-hidden shadow-md">
         <img
           src={image || "/event.jpeg"}
           alt={title}

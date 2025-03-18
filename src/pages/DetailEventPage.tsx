@@ -5,6 +5,7 @@ import EventHeader from "../components/event/EventHeader";
 import SearchBar from "../components/common/SearchBar";
 import ParticipantTable from "../components/event/ParticipantTable";
 import TicketSalesCard from "../components/event/DataCard";
+import { BiInfoCircle } from "react-icons/bi"; 
 
 interface Participant {
   id: string;
@@ -36,6 +37,7 @@ const DetailEventPage = () => {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     const fetchEventDetail = async () => {
@@ -80,41 +82,48 @@ const DetailEventPage = () => {
 
   if (loading)
     return (
-      <div className="flex justify-center items-center place-items-center  h-full py-[65%]">
+      <div className="flex justify-center items-center h-screen">
         <p className="text-lg font-semibold text-pink-700 animate-pulse">
           Loading...
         </p>
       </div>
     );
   if (!event)
-  return (
-    <div className="flex justify-center items-center place-items-center h-full py-[65%]">
-      <p className="text-lg font-semibold text-pink-700">
-        Data Event Tidak Ditemukan.
-      </p>
-    </div>
-  );
-
-  return (
-    <div className="max-w-4xl px-4">
-      <h1 className="font-bold text-xl py-4">Event Detail & Information</h1>
-      <EventHeader
-        title={event.title}
-        date={event.date}
-        time={event.time}
-        image={event.image_url}
-      />
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
-        <TicketSalesCard
-          revenue={event.revenue}
-          tickets_sold={event.tickets_sold}
-          check_ins={event.check_ins}
-          user_regist={event.user_regist}
-        />
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-lg font-semibold text-pink-700">
+          Data Event Tidak Ditemukan.
+        </p>
       </div>
+    );
 
+  return (
+    <div className="max-w-4xl mx-auto px-4 pb-24">
+      {/* Header dengan Ikon */}
+      <div className="flex items-center gap-2 text-gray-700 py-4">
+        <BiInfoCircle className="text-pink-700" size={24} />
+        <h1 className="font-bold text-xl">Event Detail & Information</h1>
+      </div>
+      <div className="w-full flex flex-col md:flex-row justify-between gap-4">
+        <div className="flex flex-col w-full max-w-2xl justify-center">
+          <EventHeader
+            title={event.title}
+            date={event.date}
+            time={event.time}
+            image={event.image_url}
+          />
+        </div>
+
+        <div className="flex flex-col w-full md:max-w-sm ">
+          <TicketSalesCard
+            revenue={event.revenue}
+            tickets_sold={event.tickets_sold}
+            check_ins={event.check_ins}
+            user_regist={event.user_regist}
+          />
+        </div>
+      </div>
       <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} />
-
       <ParticipantTable
         participants={filteredParticipants}
         organizerId={organizerId!}

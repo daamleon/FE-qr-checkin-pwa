@@ -43,7 +43,7 @@ const TicketSalesCard: React.FC<TicketSalesProps> = ({
 
         {/* Filter Buttons */}
         <div className="mt-4 flex space-x-2">
-          <button className="px-3 py-1 text-sm bg-pink-500 text-white rounded-md">
+          <button className="px-3 py-1 text-sm bg-pink-700 text-white rounded-md">
             All time
           </button>
           <button className="px-3 py-1 text-sm border rounded-md">Today</button>

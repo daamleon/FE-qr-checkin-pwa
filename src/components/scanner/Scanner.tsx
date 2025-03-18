@@ -17,7 +17,7 @@ const Scanner: React.FC<ScannerProps> = ({ onScan, onError, isLoading }) => {
         </div>
       ) : (
         <div className="relative flex items-center justify-center h-[70vh] rounded-xl overflow-hidden">
-          <p className="absolute top-3 text-white bg-gray-700 px-3 py-1 rounded-md text-sm z-10">
+          <p className="absolute top-3 text-white bg-pink-700/80 px-3 py-1 rounded-md text-sm z-10">
             Arahkan kamera ke kode QR
           </p>
 

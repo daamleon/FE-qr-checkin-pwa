@@ -77,3 +77,49 @@ export const checkInParticipant = async (
     };
   }
 };
+export const fetchEventById = async (organizerId: number, eventId: number) => {
+  try {
+    console.log(
+      `🔍 Mencari event ID: ${eventId} dalam organizer ID: ${organizerId}`
+    );
+
+    // Mengambil data organizer berdasarkan organizerId
+    const response = await fetch(`${API_BASE_URL}/organizers/${organizerId}`);
+    if (!response.ok) {
+      console.error(`❌ Gagal mengambil data untuk organizer ${organizerId}`);
+      return null;
+    }
+
+    const organizer = await response.json();
+    console.log(`✅ Data organizer ditemukan:`, organizer);
+
+    // Pastikan ada event dalam organizer
+    if (!organizer.events || organizer.events.length === 0) {
+      console.warn(`❌ Organizer ID ${organizerId} tidak memiliki events.`);
+      return null;
+    }
+
+    // Cari event berdasarkan eventId
+    const event = organizer.events.find(
+      (event: any) => event.id === Number(eventId)
+    );
+    if (event) {
+      console.log(`✅ Event ditemukan: ${event.title}`);
+      return event;
+    } else {
+      console.warn(
+        `❌ Event ID ${eventId} tidak ditemukan dalam organizer ${organizerId}`
+      );
+      console.log(`📌 Events yang tersedia:`, organizer.events); // Debugging
+      return null;
+    }
+  } catch (error) {
+    console.error("❌ Error fetching event:", error);
+    return null;
+  }
+};
+
+
+
+
+

@@ -52,7 +52,7 @@ const ProfilePage = () => {
     <div className="w-full place-items-center">
       <div className="mx-auto p-6 pb-12 bg-white shadow-md h-screen max-w-2xl">
         <div className="flex items-center gap-4">
-          <User size={20} className="text-blue-500" />
+          <User size={20} className="text-pink-700" />
           <h2 className="text-2xl font-semibold">Profil</h2>
         </div>
 

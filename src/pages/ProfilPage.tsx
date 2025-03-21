@@ -7,6 +7,7 @@ import API_BASE_URL from "../services/api";
 interface Organizer {
   id: number;
   name: string;
+  category: string; // ✅ Tambahkan kategori organizer
 }
 
 const ProfilePage = () => {
@@ -14,7 +15,11 @@ const ProfilePage = () => {
   const authContext = useContext(AuthContext);
 
   if (!authContext || !authContext.user) {
-    return <p>Anda harus login untuk melihat halaman ini.</p>;
+    return (
+      <p className="text-center text-red-500">
+        Anda harus login untuk melihat halaman ini.
+      </p>
+    );
   }
 
   const { user, logout } = authContext;
@@ -43,12 +48,6 @@ const ProfilePage = () => {
     navigate(`/organizer/${organizerId}/events`);
   };
 
-  // const handleLogout = () => {
-  //   localStorage.removeItem("token");
-  //   localStorage.removeItem("user");
-  //   navigate("/login", { replace: true });
-  // };
-
   return (
     <div className="w-full place-items-center">
       <div className="mx-auto p-6 pb-12 bg-white shadow-md h-screen max-w-2xl">
@@ -66,33 +65,48 @@ const ProfilePage = () => {
           />
           <h3 className="mt-3 text-xl font-semibold">{user.name}</h3>
           <p className="text-gray-500">{user.email}</p>
-          <span className="mt-1 px-3 py-1 bg-green-100 text-green-600 text-sm rounded-full">
-            Aktif
-          </span>
         </div>
 
         {/* Daftar Organizer */}
         <div className="mt-6 flex-grow overflow-auto max-h-[30vh] pr-2">
           <h3 className="text-lg font-semibold mb-2">Organizer Anda</h3>
-          <div className="space-y-3">
-            {organizers.map((org) => (
-              <div
-                key={org.id}
-                className="flex justify-between items-center p-3 bg-gray-100 rounded-lg shadow-sm cursor-pointer hover:bg-gray-200 transition"
-                onClick={() => handleOrganizerClick(org.id)}
-              >
-                <div>
-                  <h4 className="text-md font-medium">{org.name}</h4>
+          {organizers.length > 0 ? (
+            <div className="space-y-3">
+              {organizers.map((org) => (
+                <div
+                  key={org.id}
+                  className="flex justify-between items-center p-3 bg-gray-100 rounded-lg shadow-sm cursor-pointer hover:bg-gray-200 transition"
+                  onClick={() => handleOrganizerClick(org.id)}
+                >
+                  <div>
+                    <h4 className="text-md font-medium">{org.name}</h4>
+                    <p className="text-sm text-gray-500">{org.category}</p>{" "}
+                    {/* ✅ Tambahkan kategori */}
+                  </div>
+                  <Users size={24} className="text-pink-700" />
                 </div>
-                <Users size={24} className="text-pink-700" />
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center mt-4">
+              <p className="text-gray-600">
+                Anda belum memiliki organizer. Buat organizer di{" "}
+                <a
+                  href="https://agendakota.id"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-pink-600 font-semibold hover:underline"
+                >
+                  agendakota.id
+                </a>
+              </p>
+            </div>
+          )}
         </div>
 
         <button
           onClick={logout}
-          className="mt-6 bg-red-500 text-white py-2 px-4 rounded w-full"
+          className="mt-6 bg-pink-700 text-white py-2 px-4 rounded w-full"
         >
           Logout
         </button>

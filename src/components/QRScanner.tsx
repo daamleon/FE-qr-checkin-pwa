@@ -53,7 +53,7 @@ const handleScan = async (result: any) => {
       }
 
       // Mengambil nama event berdasarkan organizerId dan eventId
-      const event = await fetchEventById(Number(organizerId), Number(eventId));
+      const event = await fetchEventById((organizerId), (eventId));
       if (event) {
         setEventName(event.title);
         console.log(`✅ Event ditemukan: ${event.title}`);

@@ -1,16 +1,34 @@
-import { Participant, ApiResponse, User } from "../types";
-
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 export default API_BASE_URL;
 
 /**
+ * Fetch event data by organizer ID and event ID.
+ */
+export const fetchEventById = async (organizerId: number, eventId: number) => {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/organizers/${organizerId}/events/${eventId}`
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch event: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching event by ID:", error);
+    return null;
+  }
+};
+
+/**
  * Fetch participant data by event ID and participant ID.
  */
 export const fetchParticipantById = async (
-  eventId: string,
+  eventId: number,
   participantId: string
-): Promise<Participant | null> => {
+) => {
   try {
     console.log(
       `Fetching participant from: ${API_BASE_URL}/participants?eventId=${eventId}`
@@ -25,13 +43,7 @@ export const fetchParticipantById = async (
     }
 
     const participants = await response.json();
-
-    // Cari participant berdasarkan ID
-    const participant = participants.find(
-      (p: Participant) => p.id === participantId
-    );
-
-    return participant || null;
+    return participants.find((p: any) => p.id === participantId) || null;
   } catch (error) {
     console.error("Error fetching participant:", error);
     return null;
@@ -41,13 +53,11 @@ export const fetchParticipantById = async (
 /**
  * Check-in participant
  */
-export const checkInParticipant = async (
-  participantId: string
-): Promise<ApiResponse> => {
+export const checkInParticipant = async (participantId: string) => {
   try {
     console.log(`Checking in participant: ${participantId}`);
 
-    const updateResponse = await fetch(
+    const response = await fetch(
       `${API_BASE_URL}/participants/${participantId}`,
       {
         method: "PATCH",
@@ -59,33 +69,21 @@ export const checkInParticipant = async (
       }
     );
 
-    if (!updateResponse.ok) {
-      throw new Error("Failed to update participant check-in");
+    if (!response.ok) {
+      throw new Error("Failed to check in participant");
     }
 
-    const updatedData: Participant = await updateResponse.json();
-
-    return {
-      success: true,
-      message: "Check-in successful",
-      data: updatedData,
-    };
+    return await response.json();
   } catch (error) {
     console.error("Error checking in participant:", error);
-    return {
-      success: false,
-      message: "Failed to check in participant. Please try again.",
-    };
+    return null;
   }
 };
 
 /**
  * Login user
  */
-export const loginUser = async (
-  email: string,
-  password: string
-): Promise<User | null> => {
+export const loginUser = async (email: string, password: string) => {
   try {
     console.log(`Logging in user with email: ${email}`);
 
@@ -95,9 +93,9 @@ export const loginUser = async (
       throw new Error(`Error fetching users: ${response.statusText}`);
     }
 
-    const users: User[] = await response.json();
+    const users = await response.json();
     const user = users.find(
-      (u) => u.email === email && u.password === password
+      (u: any) => u.email === email && u.password === password
     );
 
     if (!user) {
@@ -105,7 +103,6 @@ export const loginUser = async (
     }
 
     localStorage.setItem("user", JSON.stringify(user));
-
     return user;
   } catch (error) {
     console.error("Error logging in user:", error);
@@ -116,7 +113,7 @@ export const loginUser = async (
 /**
  * Get the current logged-in user from localStorage
  */
-export const getCurrentUser = (): User | null => {
+export const getCurrentUser = () => {
   const user = localStorage.getItem("user");
   return user ? JSON.parse(user) : null;
 };
@@ -128,18 +125,21 @@ export const logoutUser = () => {
   localStorage.removeItem("user");
 };
 
-export const fetchEventById = async (eventId: string) => {
+/**
+ * Fetch organizers for the logged-in user
+ */
+export const fetchUserOrganizers = async (userId: number) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/events/${eventId}`);
+    const response = await fetch(`${API_BASE_URL}/organizers`);
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch event: ${response.statusText}`);
+      throw new Error(`Error fetching organizers: ${response.statusText}`);
     }
 
-    return await response.json();
+    const organizers = await response.json();
+    return organizers.filter((org: any) => org.ownerId === userId);
   } catch (error) {
-    console.error("Error fetching event by ID:", error);
-    return null;
+    console.error("Error fetching organizers:", error);
+    return [];
   }
 };
-

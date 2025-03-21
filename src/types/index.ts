@@ -13,3 +13,12 @@ export interface ApiResponse {
   message: string;
   data?: Participant;
 }
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  password: string;
+  organizerIds: number[]; // ✅ Pastikan ini adalah array
+}

@@ -1,4 +1,4 @@
-import { Participant, ApiResponse } from "../types";
+import { Participant, ApiResponse, User } from "../types";
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
@@ -16,7 +16,9 @@ export const fetchParticipantById = async (
       `Fetching participant from: ${API_BASE_URL}/participants?eventId=${eventId}`
     );
 
-    const response = await fetch(`${API_BASE_URL}/participants?eventId=${eventId}`);
+    const response = await fetch(
+      `${API_BASE_URL}/participants?eventId=${eventId}`
+    );
 
     if (!response.ok) {
       throw new Error(`Error fetching participants: ${response.statusText}`);
@@ -45,7 +47,6 @@ export const checkInParticipant = async (
   try {
     console.log(`Checking in participant: ${participantId}`);
 
-    // PATCH langsung ke /participants/{id}
     const updateResponse = await fetch(
       `${API_BASE_URL}/participants/${participantId}`,
       {
@@ -77,49 +78,68 @@ export const checkInParticipant = async (
     };
   }
 };
-export const fetchEventById = async (organizerId: number, eventId: number) => {
+
+/**
+ * Login user
+ */
+export const loginUser = async (
+  email: string,
+  password: string
+): Promise<User | null> => {
   try {
-    console.log(
-      `🔍 Mencari event ID: ${eventId} dalam organizer ID: ${organizerId}`
-    );
+    console.log(`Logging in user with email: ${email}`);
 
-    // Mengambil data organizer berdasarkan organizerId
-    const response = await fetch(`${API_BASE_URL}/organizers/${organizerId}`);
+    const response = await fetch(`${API_BASE_URL}/users`);
+
     if (!response.ok) {
-      console.error(`❌ Gagal mengambil data untuk organizer ${organizerId}`);
-      return null;
+      throw new Error(`Error fetching users: ${response.statusText}`);
     }
 
-    const organizer = await response.json();
-    console.log(`✅ Data organizer ditemukan:`, organizer);
-
-    // Pastikan ada event dalam organizer
-    if (!organizer.events || organizer.events.length === 0) {
-      console.warn(`❌ Organizer ID ${organizerId} tidak memiliki events.`);
-      return null;
-    }
-
-    // Cari event berdasarkan eventId
-    const event = organizer.events.find(
-      (event: any) => event.id === Number(eventId)
+    const users: User[] = await response.json();
+    const user = users.find(
+      (u) => u.email === email && u.password === password
     );
-    if (event) {
-      console.log(`✅ Event ditemukan: ${event.title}`);
-      return event;
-    } else {
-      console.warn(
-        `❌ Event ID ${eventId} tidak ditemukan dalam organizer ${organizerId}`
-      );
-      console.log(`📌 Events yang tersedia:`, organizer.events); // Debugging
-      return null;
+
+    if (!user) {
+      throw new Error("Invalid email or password");
     }
+
+    localStorage.setItem("user", JSON.stringify(user));
+
+    return user;
   } catch (error) {
-    console.error("❌ Error fetching event:", error);
+    console.error("Error logging in user:", error);
     return null;
   }
 };
 
+/**
+ * Get the current logged-in user from localStorage
+ */
+export const getCurrentUser = (): User | null => {
+  const user = localStorage.getItem("user");
+  return user ? JSON.parse(user) : null;
+};
 
+/**
+ * Logout user
+ */
+export const logoutUser = () => {
+  localStorage.removeItem("user");
+};
 
+export const fetchEventById = async (eventId: string) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/events/${eventId}`);
 
+    if (!response.ok) {
+      throw new Error(`Failed to fetch event: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching event by ID:", error);
+    return null;
+  }
+};
 

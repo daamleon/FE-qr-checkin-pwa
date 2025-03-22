@@ -7,10 +7,10 @@ import {
   useLocation,
 } from "react-router-dom";
 import { NetworkProvider } from "./context/NetworkContext";
-import { AuthContext } from "./context/AuthContext";
+import { AuthContext, AuthProvider } from "./context/AuthContext";
 import Header from "./components/Header";
 import NetworkStatus from "./components/NetworkStatus";
-import HomePage from "./pages/HomePage";
+// import HomePage from "./pages/HomePage";
 import ScanPage from "./pages/ScanPage";
 import AboutPage from "./pages/AboutPage";
 import DetailEventPage from "./pages/DetailEventPage";
@@ -19,21 +19,12 @@ import ProfilePage from "./pages/ProfilPage";
 import EventPage from "./pages/EventPage";
 import LoginPage from "./pages/LoginPage";
 import { registerSW } from "virtual:pwa-register";
-import { AuthProvider } from "./context/AuthContext";
 import NavMobile from "./components/NavMobile";
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
   const authContext = useContext(AuthContext);
   if (!authContext || !authContext.user) {
-    return <Navigate to="/login" />;
-  }
-  return children;
-}
-
-function PublicRoute({ children }: { children: JSX.Element }) {
-  const authContext = useContext(AuthContext);
-  if (authContext && authContext.user) {
-    return <Navigate to="/" />; // Redirect ke Home jika sudah login
+    return <Navigate to="/login" replace />;
   }
   return children;
 }
@@ -76,65 +67,64 @@ function App() {
     <AuthProvider>
       <NetworkProvider>
         <Router>
-          <LayoutWithHeaderAndNav>
-            <Routes>
-              {/* Home sekarang membutuhkan login */}
-              <Route
-                path="/"
-                element={
-                  <PrivateRoute>
-                    <HomePage />
-                  </PrivateRoute>
-                }
-              />
+          <Routes>
+            {/* Login tidak memerlukan proteksi */}
+            <Route path="/login" element={<LoginPage />} />
 
-              {/* Login hanya bisa diakses jika belum login */}
-              <Route
-                path="/login"
-                element={
-                  <PublicRoute>
-                    <LoginPage />
-                  </PublicRoute>
-                }
-              />
-
-              <Route path="/about" element={<AboutPage />} />
-
-              <Route
-                path="/scan"
-                element={
-                  <PrivateRoute>
-                    <ScanPage />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/profile"
-                element={
-                  <PrivateRoute>
-                    <ProfilePage />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/organizer/:id/events"
-                element={
-                  <PrivateRoute>
-                    <EventPage />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/detail/:organizerId/:eventId"
-                element={
-                  <PrivateRoute>
-                    <DetailEventPage />
-                  </PrivateRoute>
-                }
-              />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </LayoutWithHeaderAndNav>
+            {/* Semua halaman lain menggunakan layout */}
+            <Route
+              path="*"
+              element={
+                <LayoutWithHeaderAndNav>
+                  <Routes>
+                    {/* Default route langsung ke /scan */}
+                    <Route
+                      path="/"
+                      element={
+                        <PrivateRoute>
+                          <Navigate to="/scan" replace />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/scan"
+                      element={
+                        <PrivateRoute>
+                          <ScanPage />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route path="/about" element={<AboutPage />} />
+                    <Route
+                      path="/profile"
+                      element={
+                        <PrivateRoute>
+                          <ProfilePage />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/organizer/:id/events"
+                      element={
+                        <PrivateRoute>
+                          <EventPage />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/detail/:organizerId/:eventId"
+                      element={
+                        <PrivateRoute>
+                          <DetailEventPage />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </LayoutWithHeaderAndNav>
+              }
+            />
+          </Routes>
         </Router>
       </NetworkProvider>
     </AuthProvider>

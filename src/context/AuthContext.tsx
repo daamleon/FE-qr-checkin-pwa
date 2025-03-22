@@ -1,7 +1,6 @@
 import React, { createContext, useState, useEffect, ReactNode } from "react";
 import { getCurrentUser, loginUser, logoutUser } from "../services/api";
 
-// ✅ Definisikan tipe User agar tidak error
 interface User {
   id: number;
   name: string;
@@ -12,7 +11,10 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (
+    email: string,
+    password: string
+  ) => Promise<{ success: boolean; message: string }>;
   logout: () => void;
 }
 
@@ -30,12 +32,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (loggedInUser) setUser(loggedInUser);
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (
+    email: string,
+    password: string
+  ): Promise<{ success: boolean; message: string }> => {
     try {
       const userData = await loginUser(email, password);
-      if (userData) setUser(userData);
+
+      if (!userData || !userData.id) {
+        return { success: false, message: "Email atau password salah." };
+      }
+
+      setUser(userData);
+      return { success: true, message: "Login berhasil!" };
     } catch (error) {
-      throw error;
+      return {
+        success: false,
+        message: "Terjadi kesalahan saat login. Silakan coba lagi.",
+      };
     }
   };
 

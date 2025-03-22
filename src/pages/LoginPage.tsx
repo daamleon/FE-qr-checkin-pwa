@@ -9,10 +9,9 @@ const LoginPage = () => {
   const authContext = useContext(AuthContext);
 
   useEffect(() => {
-    // Mencegah scroll di body
     document.body.style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = "auto"; // Kembalikan scroll setelah keluar dari halaman
+      document.body.style.overflow = "auto";
     };
   }, []);
 
@@ -39,7 +38,9 @@ const LoginPage = () => {
     >
       {/* Logo & Title */}
       <div className="mb-4 flex flex-col items-center">
-        <span className="text-pink-700 text-lg font-semibold">QR SCANNER By:</span>
+        <span className="text-pink-700 text-lg font-semibold">
+          QR SCANNER By:
+        </span>
         <img
           src="/agendakota2.png"
           alt="Agendakota Logo"
@@ -53,13 +54,11 @@ const LoginPage = () => {
           Login
         </h2>
 
-        {/* Alert Message */}
-        <div className="mb-4">
-          {successMessage && (
-            <AlertMessage type="success" message={successMessage} />
-          )}
-          {errorMessage && <AlertMessage type="error" message={errorMessage} />}
-        </div>
+        {/* Pastikan alert muncul */}
+        {successMessage && (
+          <AlertMessage type="success" message={successMessage} />
+        )}
+        {errorMessage && <AlertMessage type="error" message={errorMessage} />}
 
         {/* Form */}
         <LoginForm

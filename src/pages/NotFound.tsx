@@ -10,10 +10,10 @@ const NotFoundPage: React.FC = () => {
           The page you're looking for doesn't exist or has been moved.
         </p>
         <a
-          href="/"
+          href="/scan"
           className="inline-block px-6 py-3 bg-white text-purple-600 font-semibold rounded-lg shadow-lg hover:bg-gray-100 transition duration-300"
         >
-          Go Back Home
+          Go Back
         </a>
       </div>
     </div>

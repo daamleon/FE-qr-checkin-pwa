@@ -20,12 +20,20 @@ import EventPage from "./pages/EventPage";
 import LoginPage from "./pages/LoginPage";
 import { registerSW } from "virtual:pwa-register";
 import { AuthProvider } from "./context/AuthContext";
-import NavMobile from "./components/NavMobile"; // Tambahkan NavMobile
+import NavMobile from "./components/NavMobile";
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
   const authContext = useContext(AuthContext);
   if (!authContext || !authContext.user) {
     return <Navigate to="/login" />;
+  }
+  return children;
+}
+
+function PublicRoute({ children }: { children: JSX.Element }) {
+  const authContext = useContext(AuthContext);
+  if (authContext && authContext.user) {
+    return <Navigate to="/" />; // Redirect ke Home jika sudah login
   }
   return children;
 }
@@ -36,7 +44,6 @@ function LayoutWithHeaderAndNav({ children }: { children: JSX.Element }) {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Header dan Nav hanya muncul jika bukan di halaman login */}
       {!isLoginPage && (
         <>
           <header className="sticky top-0 left-0 w-full bg-white z-50">
@@ -45,10 +52,7 @@ function LayoutWithHeaderAndNav({ children }: { children: JSX.Element }) {
           <NetworkStatus />
         </>
       )}
-
       <main className="w-screen">{children}</main>
-
-      {/* Nav Mobile hanya muncul jika bukan di halaman login */}
       {!isLoginPage && <NavMobile />}
     </div>
   );
@@ -74,9 +78,28 @@ function App() {
         <Router>
           <LayoutWithHeaderAndNav>
             <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/login" element={<LoginPage />} />
+              {/* Home sekarang membutuhkan login */}
+              <Route
+                path="/"
+                element={
+                  <PrivateRoute>
+                    <HomePage />
+                  </PrivateRoute>
+                }
+              />
+
+              {/* Login hanya bisa diakses jika belum login */}
+              <Route
+                path="/login"
+                element={
+                  <PublicRoute>
+                    <LoginPage />
+                  </PublicRoute>
+                }
+              />
+
               <Route path="/about" element={<AboutPage />} />
+
               <Route
                 path="/scan"
                 element={

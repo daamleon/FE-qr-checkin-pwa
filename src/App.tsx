@@ -4,9 +4,10 @@ import {
   Routes,
   Route,
   Navigate,
+  useLocation,
 } from "react-router-dom";
 import { NetworkProvider } from "./context/NetworkContext";
-import { AuthContext } from "./context/AuthContext"; // Tambahkan ini
+import { AuthContext } from "./context/AuthContext";
 import Header from "./components/Header";
 import NetworkStatus from "./components/NetworkStatus";
 import HomePage from "./pages/HomePage";
@@ -19,16 +20,38 @@ import EventPage from "./pages/EventPage";
 import LoginPage from "./pages/LoginPage";
 import { registerSW } from "virtual:pwa-register";
 import { AuthProvider } from "./context/AuthContext";
+import NavMobile from "./components/NavMobile"; // Tambahkan NavMobile
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
   const authContext = useContext(AuthContext);
-
-  // Pastikan authContext tidak null sebelum mengakses user
   if (!authContext || !authContext.user) {
     return <Navigate to="/login" />;
   }
-
   return children;
+}
+
+function LayoutWithHeaderAndNav({ children }: { children: JSX.Element }) {
+  const location = useLocation();
+  const isLoginPage = location.pathname === "/login";
+
+  return (
+    <div className="min-h-screen bg-gray-100">
+      {/* Header dan Nav hanya muncul jika bukan di halaman login */}
+      {!isLoginPage && (
+        <>
+          <header className="sticky top-0 left-0 w-full bg-white z-50">
+            <Header />
+          </header>
+          <NetworkStatus />
+        </>
+      )}
+
+      <main className="w-screen">{children}</main>
+
+      {/* Nav Mobile hanya muncul jika bukan di halaman login */}
+      {!isLoginPage && <NavMobile />}
+    </div>
+  );
 }
 
 function App() {
@@ -49,52 +72,46 @@ function App() {
     <AuthProvider>
       <NetworkProvider>
         <Router>
-          <div className="min-h-screen bg-gray-100">
-            <header className="sticky top-0 left-0 w-full bg-white z-50">
-              <Header />
-            </header>
-            <NetworkStatus />
-            <main className="w-screen">
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route
-                  path="/scan"
-                  element={
-                    <PrivateRoute>
-                      <ScanPage />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path="/profile"
-                  element={
-                    <PrivateRoute>
-                      <ProfilePage />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path="/organizer/:id/events"
-                  element={
-                    <PrivateRoute>
-                      <EventPage />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path="/detail/:organizerId/:eventId"
-                  element={
-                    <PrivateRoute>
-                      <DetailEventPage />
-                    </PrivateRoute>
-                  }
-                />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
-          </div>
+          <LayoutWithHeaderAndNav>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route
+                path="/scan"
+                element={
+                  <PrivateRoute>
+                    <ScanPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <PrivateRoute>
+                    <ProfilePage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/organizer/:id/events"
+                element={
+                  <PrivateRoute>
+                    <EventPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/detail/:organizerId/:eventId"
+                element={
+                  <PrivateRoute>
+                    <DetailEventPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </LayoutWithHeaderAndNav>
         </Router>
       </NetworkProvider>
     </AuthProvider>

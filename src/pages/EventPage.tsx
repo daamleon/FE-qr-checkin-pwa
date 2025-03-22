@@ -93,7 +93,7 @@ const EventPage = () => {
 
   if (!user.organizerIds.length) {
     return (
-      <div className="flex justify-center items-center min-h-screen text-center p-6">
+      <div className="flex flex-col justify-center items-center min-h-screen text-center p-6">
         <p className="text-lg font-semibold text-gray-600">
           Anda belum memiliki organizer. Buat organizer di{" "}
           <a
@@ -105,6 +105,12 @@ const EventPage = () => {
             agendakota.id
           </a>
         </p>
+        <button
+          onClick={() => window.open("https://agendakota.id", "_blank")}
+          className="mt-4 bg-pink-700 text-white py-2 px-4 rounded-lg w-full font-semibold hover:bg-pink-800 transition-all"
+        >
+          Buat Organizer
+        </button>
       </div>
     );
   }

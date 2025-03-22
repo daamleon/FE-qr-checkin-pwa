@@ -7,7 +7,7 @@ import API_BASE_URL from "../services/api";
 interface Organizer {
   id: number;
   name: string;
-  category: string; // ✅ Tambahkan kategori organizer
+  category: string;
 }
 
 const ProfilePage = () => {
@@ -30,8 +30,6 @@ const ProfilePage = () => {
       try {
         const response = await fetch(`${API_BASE_URL}/organizers`);
         const data: Organizer[] = await response.json();
-
-        // Ambil hanya organizer yang dimiliki user
         const userOrganizers = data.filter((org) =>
           user.organizerIds.includes(org.id)
         );
@@ -49,15 +47,16 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="w-full place-items-center">
-      <div className="mx-auto p-6 pb-12 bg-white shadow-md h-screen max-w-2xl">
-        <div className="flex items-center gap-4">
-          <User size={20} className="text-pink-700" />
+    <div className="place-items-center">
+      <div className=" bg-white shadow-lg rounded-lg px-6 max-w-md w-full h-screen items-center">
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-6 pt-4 border-b pb-4">
+          <User size={24} className="text-pink-700" />
           <h2 className="text-2xl font-semibold">Profil</h2>
         </div>
 
-        {/* Info User */}
-        <div className="flex flex-col items-center">
+        {/* User Info */}
+        <div className="flex flex-col items-center text-center">
           <img
             src="/profilpic.jpg"
             alt="User Avatar"
@@ -67,21 +66,20 @@ const ProfilePage = () => {
           <p className="text-gray-500">{user.email}</p>
         </div>
 
-        {/* Daftar Organizer */}
-        <div className="mt-6 flex-grow overflow-auto max-h-[30vh] pr-2">
-          <h3 className="text-lg font-semibold mb-2">Organizer Anda</h3>
+        {/* Organizer List */}
+        <div className="mt-6">
+          <h3 className="text-lg font-semibold mb-3">Organizer Anda</h3>
           {organizers.length > 0 ? (
-            <div className="space-y-3">
+            <div className="grid gap-3">
               {organizers.map((org) => (
                 <div
                   key={org.id}
-                  className="flex justify-between items-center p-3 bg-gray-100 rounded-lg shadow-sm cursor-pointer hover:bg-gray-200 transition"
+                  className="flex items-center justify-between bg-gray-100 p-3 rounded-lg shadow-sm cursor-pointer hover:shadow-md hover:scale-105 transition"
                   onClick={() => handleOrganizerClick(org.id)}
                 >
                   <div>
                     <h4 className="text-md font-medium">{org.name}</h4>
-                    <p className="text-sm text-gray-500">{org.category}</p>{" "}
-                    {/* ✅ Tambahkan kategori */}
+                    <p className="text-sm text-gray-500">{org.category}</p>
                   </div>
                   <Users size={24} className="text-pink-700" />
                 </div>
@@ -100,13 +98,20 @@ const ProfilePage = () => {
                   agendakota.id
                 </a>
               </p>
+              <button
+                onClick={() => window.open("https://agendakota.id", "_blank")}
+                className="mt-4 bg-pink-700 text-white py-2 px-4 rounded-lg w-full font-semibold hover:bg-pink-800 transition-all"
+              >
+                Buat Organizer
+              </button>
             </div>
           )}
         </div>
 
+        {/* Logout Button */}
         <button
           onClick={logout}
-          className="mt-6 bg-pink-700 text-white py-2 px-4 rounded w-full"
+          className="mt-6 bg-pink-700 text-white py-2 px-4 rounded-lg w-full font-semibold hover:bg-pink-800 transition-all"
         >
           Logout
         </button>

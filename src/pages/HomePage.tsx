@@ -17,7 +17,7 @@ const Homepage: React.FC = () => {
           <div className="flex justify-center space-x-4">
             <Link
               to="/scan"
-              className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
+              className="inline-flex items-center px-6 py-3 bg-pink-700 text-white font-semibold rounded-lg shadow-md hover:bg-pink-600 transition duration-300"
             >
               <Scan className="h-5 w-5 mr-2" />
               <span>Start Scanning</span>

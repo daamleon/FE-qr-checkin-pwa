@@ -9,7 +9,7 @@ import {
 import { NetworkProvider } from "./context/NetworkContext";
 import { AuthContext, AuthProvider } from "./context/AuthContext";
 import Header from "./components/Header";
-import NetworkStatus from "./components/NetworkStatus";
+// import NetworkStatus from "./components/NetworkStatus";
 // import HomePage from "./pages/HomePage";
 import ScanPage from "./pages/ScanPage";
 import AboutPage from "./pages/AboutPage";
@@ -40,7 +40,7 @@ function LayoutWithHeaderAndNav({ children }: { children: JSX.Element }) {
           <header className="sticky top-0 left-0 w-full bg-white z-50">
             <Header />
           </header>
-          <NetworkStatus />
+          {/* <NetworkStatus /> */}
         </>
       )}
       <main className="w-screen">{children}</main>

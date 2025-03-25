@@ -2,61 +2,45 @@ const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 export default API_BASE_URL;
 
-/**
- * Fetch event data by organizer ID and event ID.
- */
 export const fetchEventById = async (organizerId: number, eventId: number) => {
   try {
-    const response = await fetch(
-      `${API_BASE_URL}/organizers/${organizerId}/events/${eventId}`
-    );
+    const response = await fetch(`${API_BASE_URL}/organizers/${organizerId}`);
+    if (!response.ok) throw new Error("Organizer not found");
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch event: ${response.statusText}`);
-    }
+    const organizer = await response.json();
+    const event = organizer.events.find((e: any) => e.id === eventId);
 
-    return await response.json();
+    if (!event) throw new Error("Event not found in this organizer");
+    return event;
   } catch (error) {
-    console.error("Error fetching event by ID:", error);
-    return null;
+    console.error("Error fetching event:", error);
+    throw error;
   }
 };
 
-/**
- * Fetch participant data by event ID and participant ID.
- */
 export const fetchParticipantById = async (
   eventId: number,
   participantId: string
 ) => {
   try {
-    console.log(
-      `Fetching participant from: ${API_BASE_URL}/participants?eventId=${eventId}`
-    );
-
-    const response = await fetch(
-      `${API_BASE_URL}/participants?eventId=${eventId}`
-    );
-
-    if (!response.ok) {
-      throw new Error(`Error fetching participants: ${response.statusText}`);
-    }
+    const response = await fetch(`${API_BASE_URL}/participants`);
+    if (!response.ok) throw new Error("Failed to fetch participants");
 
     const participants = await response.json();
-    return participants.find((p: any) => p.id === participantId) || null;
+    const participant = participants.find(
+      (p: any) => p.id === participantId && p.eventId === eventId
+    );
+
+    if (!participant) throw new Error("Participant not found in this event");
+    return participant;
   } catch (error) {
     console.error("Error fetching participant:", error);
-    return null;
+    throw error;
   }
 };
 
-/**
- * Check-in participant
- */
 export const checkInParticipant = async (participantId: string) => {
   try {
-    console.log(`Checking in participant: ${participantId}`);
-
     const response = await fetch(
       `${API_BASE_URL}/participants/${participantId}`,
       {
@@ -69,20 +53,14 @@ export const checkInParticipant = async (participantId: string) => {
       }
     );
 
-    if (!response.ok) {
-      throw new Error("Failed to check in participant");
-    }
-
+    if (!response.ok) throw new Error("Check-in failed");
     return await response.json();
   } catch (error) {
-    console.error("Error checking in participant:", error);
-    return null;
+    console.error("Error during check-in:", error);
+    throw error;
   }
 };
 
-/**
- * Login user
- */
 export const loginUser = async (email: string, password: string) => {
   try {
     console.log(`Logging in user with email: ${email}`);

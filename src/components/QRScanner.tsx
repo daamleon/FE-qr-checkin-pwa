@@ -3,139 +3,140 @@ import {
   fetchParticipantById,
   checkInParticipant,
   fetchEventById,
+  getCurrentUser
 } from "../services/api";
 import Scanner from "./scanner/Scanner";
 import ParticipantInfo from "./scanner/ParticipantInfo";
 import MessageAlert from "./scanner/MessageAlert";
 import CheckInSuccess from "./scanner/CheckInSuccess";
+import { toast } from "react-toastify";
 
 const QRScanner: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [participantData, setParticipantData] = useState<any>(null);
-  const [showScanner, setShowScanner] = useState<boolean>(true);
-  const [showSuccess, setShowSuccess] = useState<boolean>(false);
-  const [isAlreadyCheckedIn, setIsAlreadyCheckedIn] = useState<boolean>(false);
-  const [eventName, setEventName] = useState<string>("Event Tidak Diketahui"); // Nama event default
+  const [showScanner, setShowScanner] = useState(true);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [isAlreadyCheckedIn, setIsAlreadyCheckedIn] = useState(false);
+  const [eventName, setEventName] = useState("");
+  const [eventDate, setEventDate] = useState("");
 
-const handleScan = async (result: any) => {
-  if (result) {
+  const handleScan = async (result: any) => {
+    if (!result) return;
+
     const scannedData = result?.text || result?.data || result;
-    console.log("Scanned QR Data:", scannedData);
+    console.log("Scanned data:", scannedData);
 
-    if (!scannedData) {
-      setError("Invalid QR Code.");
+    // Validate QR format
+    const parts = scannedData.trim().split("-");
+    if (parts.length !== 3) {
+      setError("Format QR tidak valid. Harap gunakan QR resmi dari event ini.");
       return;
     }
 
-    const [organizerId, eventId, participantId] = scannedData.trim().split("-");
+    const [organizerId, eventId, participantId] = parts;
+    
+    // Validate IDs
     if (!organizerId || !eventId || !participantId) {
-      setError("QR Code format invalid.");
+      setError("Data QR code tidak lengkap");
       return;
     }
 
-    console.log(
-      `📌 Memanggil fetchEventById dengan organizerId: ${organizerId}, eventId: ${eventId}`
-    );
+    if (isNaN(Number(organizerId)) || isNaN(Number(eventId))) {
+      setError("ID organizer atau event tidak valid");
+      return;
+    }
 
     setIsLoading(true);
     setError(null);
     setParticipantData(null);
-    setEventName("Event Tidak Diketahui");
+    setEventName("Memuat data event...");
+    setEventDate("");
 
     try {
-      console.log(`Fetching participant with ID: ${participantId}`);
-      const participant = await fetchParticipantById(eventId, participantId);
+      const user = getCurrentUser();
+      if (!user) throw new Error("Harap login terlebih dahulu");
 
-      if (!participant) {
-        setError(`Participant ${participantId} not found in event ${eventId}`);
-        return;
+      // Verify user has access to this organizer
+      if (!user.organizerIds.includes(Number(organizerId))) {
+        throw new Error("Anda tidak memiliki akses ke organizer ini");
       }
 
-      // Mengambil nama event berdasarkan organizerId dan eventId
-      const event = await fetchEventById((organizerId), (eventId));
-      if (event) {
-        setEventName(event.title);
-        console.log(`✅ Event ditemukan: ${event.title}`);
-      } else {
-        console.warn(`❌ Event ID ${eventId} tidak ditemukan di database.`);
-      }
+      // 1. Fetch event data
+      const event = await fetchEventById(Number(organizerId), Number(eventId));
+      setEventName(event.title);
+      setEventDate(`${event.date} ${event.time}`);
 
+      // 2. Fetch participant
+      const participant = await fetchParticipantById(Number(eventId), participantId);
+      
+      // 3. Check if already checked in
       if (participant.checked_in) {
         setParticipantData(participant);
         setIsAlreadyCheckedIn(true);
-        setShowScanner(false);
         setShowSuccess(true);
+        toast.info(`${participant.name} sudah check-in sebelumnya`);
         return;
       }
 
-      const checkInResponse = await checkInParticipant(participantId);
+      // 4. Perform check-in
+      const updatedParticipant = await checkInParticipant(participantId);
+      setParticipantData(updatedParticipant);
+      setIsAlreadyCheckedIn(false);
+      setShowSuccess(true);
+      toast.success(`Berhasil check-in ${participant.name}!`);
 
-      if (checkInResponse.success) {
-        const updatedParticipant = {
-          ...participant,
-          checked_in: true,
-          check_in_time: new Date().toLocaleString(),
-        };
-
-        setParticipantData(updatedParticipant);
-        setIsAlreadyCheckedIn(false);
-        setShowScanner(false);
-        setShowSuccess(true);
-      } else {
-        setError("Failed to check-in participant.");
-      }
-    } catch (err) {
-      console.error("Error during check-in:", err);
-      setError("Failed to process check-in.");
+    } catch (err: any) {
+      console.error("Proses check-in gagal:", err);
+      setError(err.message || "Gagal melakukan check-in. Silakan coba lagi.");
+      toast.error(err.message || "Check-in gagal");
     } finally {
       setIsLoading(false);
     }
-  }
-};
+  };
 
   const handleError = (err: any) => {
-    console.error("QR Scanner error:", err);
-    setError("Error accessing camera. Please try again.");
+    console.error("Error scanner QR:", err);
+    setError("Gagal mengakses kamera. Pastikan izin kamera diberikan.");
+    toast.error("Akses kamera diperlukan untuk scanning");
   };
 
   const handleRescan = () => {
     setShowScanner(true);
+    setShowSuccess(false);
     setParticipantData(null);
     setError(null);
-    setShowSuccess(false);
   };
 
   return (
-    <div>
+    <div className="qr-scanner-container">
       <MessageAlert message={error} type="error" />
 
       {showSuccess && participantData && (
         <CheckInSuccess
           participantName={participantData.name}
-          ticketType={participantData.ticket_type || "General Admission"}
-          eventName={eventName} // Nama event yang diambil otomatis
-          eventDate={participantData.check_in_time || "Belum Check-in"}
+          ticketType={participantData.ticket_type || "General"}
+          eventName={eventName}
+          eventDate={eventDate || participantData.check_in_time}
           isAlreadyCheckedIn={isAlreadyCheckedIn}
           onClose={handleRescan}
         />
       )}
 
-      {!showSuccess &&
-        (participantData ? (
-          <ParticipantInfo
-            participant={participantData}
-            onRescan={handleRescan}
+      {!showSuccess && (participantData ? (
+        <ParticipantInfo
+          participant={participantData}
+          onRescan={handleRescan}
+        />
+      ) : (
+        showScanner && (
+          <Scanner
+            onScan={handleScan}
+            onError={handleError}
+            isLoading={isLoading}
           />
-        ) : (
-          showScanner && (
-            <Scanner
-              onScan={handleScan}
-              onError={handleError}
-              isLoading={isLoading}
-            />
-          )
-        ))}
+        )
+      ))}
     </div>
   );
 };

@@ -94,8 +94,6 @@ const handleScan = async (result: any) => {
   }
 };
 
-
-
   const handleError = (err: any) => {
     console.error("QR Scanner error:", err);
     setError("Error accessing camera. Please try again.");

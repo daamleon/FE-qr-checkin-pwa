@@ -72,7 +72,7 @@ const LoginPage = () => {
           <p className="text-sm text-gray-600">
             Belum punya akun?{" "}
             <a
-              href="https://agendakota.id"
+              href="https://agendakota.id/register-user"
               target="_blank"
               rel="noopener noreferrer"
               className="text-pink-600 font-semibold hover:underline"

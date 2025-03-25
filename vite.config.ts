@@ -16,9 +16,9 @@ export default defineConfig({
         theme_color: "#ffffff",
         icons: [
           {
-            src: "genta192.png",
+            src: "genta192.jpg",
             sizes: "192x192",
-            type: "image/png",
+            type: "image/jpg",
           },
           {
             src: "genta512.png",
